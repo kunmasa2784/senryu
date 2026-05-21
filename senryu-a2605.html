@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>川柳句会評価 - 課題吟「緩む」</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Noto Sans JP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <!-- CSS Styles for custom animations and fine-tuning -->
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #f8fafc;
+    }
+    /* 細かなカスタマイズ：スクロールバーの最適化 */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+  <!-- ヘッダー -->
+  <header class="bg-white border-b border-slate-200 py-6 px-4 shadow-xs sticky top-0 z-40 backdrop-blur-md bg-white/90">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="inline-block bg-indigo-100 text-indigo-800 text-xs px-2.5 py-1 rounded-full font-bold mb-1">川柳句会評価</span>
+        <h1 class="text-2xl sm:text-3xl font-black tracking-wider text-slate-900 flex items-center gap-2">
+          課題吟「緩む」
+          <span class="text-lg font-normal text-slate-500">句会選評一覧</span>
+        </h1>
+      </div>
+      <p class="text-sm text-slate-500 text-right max-w-md hidden sm:block">
+        各川柳カードをクリックすると、講師による「評価のポイント」と「詳しい解説」がポップアップで表示されます。
+      </p>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
+    <!-- インフォメーションバー（モバイル向け） -->
+    <div class="sm:hidden mb-4 bg-indigo-50 border border-indigo-100 rounded-lg p-3 text-xs text-indigo-700 flex items-center gap-2">
+      <span>💡</span>
+      <span>カードをタップすると解釈と評価のポイントが見られます。</span>
+    </div>
+
+    <!-- グリッドレイアウト (横4列) -->
+    <div id="senryu-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <!-- JavaScriptでここにカードが生成されます -->
+    </div>
+  </main>
+
+  <!-- フッター -->
+  <footer class="bg-slate-950 text-slate-400 py-6 border-t border-slate-800 text-center text-xs">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>© 2026 川柳句会評価. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- モーダルウィンドウ（ポップアップ） -->
+  <div id="modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
+    <div id="modal-content" class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+      <!-- モーダル上部のグラデーションライン -->
+      <div class="h-1.5 w-full bg-gradient-to-r from-purple-600 to-indigo-800"></div>
+      
+      <!-- モーダルヘッダー -->
+      <div class="p-4 sm:p-6 border-b border-slate-100 flex justify-between items-start">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">選評詳細</span>
+          <h2 class="text-lg font-bold text-slate-900 mt-2">川柳鑑賞・分析</h2>
+        </div>
+        <button id="close-modal-btn" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition-colors" aria-label="閉じる">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- モーダルボディ (スクロール可能) -->
+      <div class="p-6 overflow-y-auto space-y-6 flex-grow">
+        <!-- 句の表示エリア -->
+        <div class="bg-slate-50 rounded-xl p-5 text-center border border-slate-100">
+          <div id="modal-senryu" class="text-xl sm:text-2xl font-black text-slate-800 tracking-widest leading-normal">
+            <!-- 動的挿入 -->
+          </div>
+          <div id="modal-author" class="text-sm text-slate-500 font-bold mt-2 text-right">
+            <!-- 動的挿入 -->
+          </div>
+        </div>
+
+        <!-- 評価のポイント & 詳しい解説 -->
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-5">
+          <!-- 評価のポイント -->
+          <div class="bg-purple-50/50 rounded-xl p-4 border border-purple-100/60">
+            <h3 class="text-xs font-black text-purple-700 tracking-wider flex items-center gap-1.5 mb-2">
+              <span class="inline-block w-2 h-2 rounded-full bg-purple-600"></span>
+              評価のポイント
+            </h3>
+            <p id="modal-point" class="text-sm font-bold text-slate-800 leading-relaxed">
+              <!-- 動的挿入 -->
+            </p>
+          </div>
+
+          <!-- 詳しい解説 -->
+          <div class="bg-indigo-50/30 rounded-xl p-4 border border-indigo-100/40">
+            <h3 class="text-xs font-black text-indigo-700 tracking-wider flex items-center gap-1.5 mb-2">
+              <span class="inline-block w-2 h-2 rounded-full bg-indigo-600"></span>
+              解釈と詳しい解説
+            </h3>
+            <p id="modal-commentary" class="text-sm text-slate-600 leading-relaxed text-justify whitespace-pre-wrap">
+              <!-- 動的挿入 -->
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- モーダルフッター -->
+      <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+        <button id="close-modal-footer-btn" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-sm font-bold shadow-sm transition-colors">
+          閉じる
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 川柳データリスト
+    const senryuData = [
+      {
+        id: 1,
+        phrase: ["孫偉大", "頬も財布も", "緩ませる"],
+        author: "純子",
+        point: "大げさな表現によるユーモアと複層的な描写",
+        commentary: "あえて「偉大」という大層な言葉を身近な「孫」に使うことで、川柳特有の「おかしみ（ユーモア）」が生まれています。また、「頬（表情・感情）」と「財布（経済・行動）」という、本来は全く別物である二つのものが同時に「緩む」様子を巧みに重ね合わせており、孫を前にしたおじいちゃん・おばあちゃんの満面の笑みが浮かんでくる名句です。"
+      },
+      {
+        id: 2,
+        phrase: ["群れてても", "緩い関係", "心地いい"],
+        author: "啓子",
+        point: "現代の人間関係の絶妙な距離感の描写",
+        commentary: "べったりと密着して束縛し合う関係ではなく、同じ集団（群れ）にいながらも、お互いを縛らない「緩い関係」こそが現代人にとって一番居心地が良いという心理を的確に突いています。「緩む」を物理的なものではなく、人間関係の距離感として捉えた着眼点が光ります。"
+      },
+      {
+        id: 3,
+        phrase: ["トランプよ", "自由の覇権", "ゆるむなよ"],
+        author: "斎木",
+        point: "時事風刺の伝わりやすさと表現の工夫",
+        commentary: "トランプ氏に対する政治的な風刺や皮肉を込めた句ですが、やや言葉が硬く、一読しただけでは作者の真意（批判なのか期待なのか、どの部分を指しているのか）が伝わりにくいという意見が出されました。時事吟は、具体的な事実や情景に落とし込むことで、より共感を呼びやすくなります。"
+      },
+      {
+        id: 4,
+        phrase: ["孫の顔", "締めてる財布", "緩ませる"],
+        author: "さち",
+        point: "説明を省いた情景の具体化と語末の処理",
+        commentary: "添削前後の変化：例えば「孫が来て〜」というような状況説明（〜して、〜だから）を極力避け、「孫の顔」と名詞でスパッと具体化することで、目の前に孫が現れた瞬間の情景が鮮明になります。\n\n結びの技法：語末を「緩ませて（余韻を残す形）」とするよりも、「緩ませる」と断定（言い切り）にする方が、句全体の意思が強くなり、引き締まった印象を与えます。"
+      },
+      {
+        id: 5,
+        phrase: ["首のしわ", "二の腕 腹も", "ゆるんでる"],
+        author: "春栄",
+        point: "自虐的な加齢描写と「余韻」の選択",
+        commentary: "自身の身体的な変化を冷徹かつ客観的に見つめた、ユーモアあふれる一句です。\n\n表現の工夫：「緩んでる」と言い切るのもストレートで面白いですが、少しニュアンスを変えて「緩み出したなあ」と嘆息するような余韻（ゆるみ出す）を持たせることで、生活感や実感がより深く滲み出ることがあります。"
+      },
+      {
+        id: 6,
+        phrase: ["身と心", "ネジがゆるんで", "ポンコツに"],
+        author: "しず",
+        point: "自虐のなかに漂う「ゆとり」と、結びの整合性",
+        commentary: "「身も心もネジが緩む」というのは、忙しい現代社会においては「リラックスできている（ゆとりがある）」という肯定的な意味にも捉えられます。しかし、結びの「ポンコツに」という強い自虐表現と組み合わせることで、少し全体のトーンがちぐはぐになっていないか、整合性についての議論が行われました。"
+      },
+      {
+        id: 7,
+        phrase: ["ベルトの穴", "二つも詰めた", "ジャズダンス"],
+        author: "ひろみつ",
+        point: "課題に対する「逆説」と、その解釈の面白さ",
+        commentary: "「緩む」というお題に対し、あえてその逆である「（お腹が）締まる」ことを詠んだ意欲作です。\n\n川柳のルールにおいて、お題の反対の事象（否定形など）を詠むことは「課題から外れている（ボツになりやすい）」と厳しく判断されることもあります。しかしこの句は、「（以前は）緩んでいた体がジャズダンスによって引き締まった」という背景や、あるいは「（きついのを）無理やり締めた」という情景を想像させるため、課題の範囲内として好意的に解釈されました。"
+      },
+      {
+        id: 8,
+        phrase: ["あちこちで", "インフラ 緩み", "陥没だ"],
+        author: "おしげ",
+        point: "語順の整理による意味の明確化",
+        commentary: "添削例：あちこちでインフラ〜 ➔ 「インフラがあちこち緩み陥没だ」\n\n元の語順だと「あちこちで」が何にかかっているのかが少し分かりにくく、インフラそのものの老朽化が伝わりづらくなっていました。語順を入れ替えて主語の「インフラが」を前に持ってくることで、「インフラそのものが緩んであちこちで陥没している」という社会問題としての意味がはっきりと通るようになります。"
+      },
+      {
+        id: 9,
+        phrase: ["バイキング", "ベルト緩めて", "てんこ盛り"],
+        author: "邦さん",
+        point: "描写のリアリティと表記の工夫",
+        commentary: "リアリティの追求：バイキングでたくさん食べるために「ズボン（やスカート）を緩める」と描写すると、脱げてしまいそうな滑稽さが強すぎて現実味が薄れます。そのため「ベルトを緩める」とするのが、リアリティがあり納得感のある描写になります。\n\n表記の工夫：「天こ盛り」と漢字混じりにするよりも、「てんこ盛り」と平仮名で表記する方が、バイキングの楽しい雰囲気や親しみやすさが視覚的にも伝わりやすくなります。"
+      },
+      {
+        id: 10,
+        phrase: ["ダイエット", "明日からだと", "ケーキ買う"],
+        author: "まさかず",
+        point: "誰もが共感できる「心の緩み」",
+        commentary: "「明日から頑張る」という言い訳をして目の前の誘惑（ケーキ）に負けてしまう様子は、多くの人が経験したことのある「意思の緩み」です。人間の弱さを憎めないユーモアで包み込んでおり、非常に共感性が高く、川柳らしい軽妙さに満ちています。"
+      },
+      {
+        id: 11,
+        phrase: ["孫が来る", "ゆるむ財布に", "ふたをする"],
+        author: "かみこ",
+        point: "定石を裏切る「逆説」の面白さ",
+        commentary: "「孫が来ると財布が緩む」というのは川柳の王道（定番）ですが、この句はあえてそれに逆らって「ふたをする（紐を締める）」という厳しさを見せています。この「一般的な期待やイメージを裏切る展開（逆説）」こそが、読み手に強い印象とクスッとした笑いを与えるスパイスになっています。"
+      },
+      {
+        id: 12,
+        phrase: ["サボテンの", "つぼみゆるませ", "白い花"],
+        author: "葉月",
+        point: "詩的な美しさと、説明的な繋ぎの排除",
+        commentary: "添削の方向性：つぼみが緩んで「〜して（〜だから）白い花が咲く」という因果関係の説明になってしまうと、詩情が薄れてしまいます。\n\n推敲案：「つぼみ緩み」「つぼみ緩ます」などの形に整えることで、サボテンが自らの力で硬いつぼみをほどき、美しい白い花を咲かせる瞬間を劇的かつ力強く写し出すことができます。"
+      },
+      {
+        id: 13,
+        phrase: ["この暑さ", "冷えたビールに", "頬ゆるむ"],
+        author: "びいき",
+        point: "より具体的な言葉選びと、初歩的な誤字の注意",
+        commentary: "言葉の具体化：ありふれた「この暑さ」という言葉を、「猛暑」や、昨今のニュース等でも話題になる40度以上の超酷暑を指す新語「酷暑日」などに置き換えることで、現代社会の過酷な気候がより生々しく伝わります。\n\n表記の注意：「頬（ほお）緩む」の歴史的仮名遣いや、「わ」と「は」の助詞の混同（例：「頬は」を「頬わ」と書くなど）がないよう、基本の表記に注意しましょう。"
+      },
+      {
+        id: 14,
+        phrase: ["ゆるむ口", "遺言だけは", "しっかりと"],
+        author: "たけちゃん",
+        point: "緩急のある「対比構造」の妙",
+        commentary: "年を重ねて、おしゃべりや物忘れで「緩んでしまった口（日常）」と、人生の最期を締めくくる非常に重たい「遺言（非日常）」という、極端な二つの要素の対比が実に見事です。「緩み」と「引き締め」のコントラストが、この句の深みと可笑しさを生み出しています。"
+      },
+      {
+        id: 15,
+        phrase: ["防衛も", "家計のネジも", "ゆるむまま"],
+        author: "ちゑ",
+        point: "大きな社会問題と身近な生活の「重層的な風刺」",
+        commentary: "国家の「安全保障・防衛」という非常に大きなマクロな問題と、自分たちの「家計のやりくり」という超ミクロな問題を、どちらも「ネジの緩み」という共通 of される言葉で同時に風刺しています。一見全く異なる次元の話を綺麗に重ね合わせることで、社会の現状に対する鋭い批判精神が宿っています。"
+      }
+    ];
+
+    // カードの生成処理
+    const grid = document.getElementById('senryu-grid');
+
+    function createSenryuCards() {
+      senryuData.forEach((item) => {
+        // カード要素の作成
+        const card = document.createElement('div');
+        // 各種クラス設定（上下の余白は狭くし、行間は詰め、ホバー時に少し浮き上がるアニメーションを設定）
+        card.className = `
+          bg-white rounded-xl shadow-xs border border-slate-100 
+          overflow-hidden cursor-pointer flex flex-col justify-between 
+          transition-all duration-300 ease-out 
+          hover:-translate-y-1 hover:shadow-md hover:border-slate-200 
+          relative group
+        `;
+        card.setAttribute('data-id', item.id);
+
+        // カードの内包HTML
+        card.innerHTML = `
+          <!-- 上部の紫から藍色へのグラデーションライン -->
+          <div class="h-1 w-full bg-gradient-to-r from-purple-500 to-indigo-700"></div>
+          
+          <div class="p-3 flex flex-col justify-between h-full min-h-[110px]">
+            <!-- 五七五で改行された川柳（行間を詰める） -->
+            <div class="text-slate-800 font-extrabold text-base tracking-widest leading-tight">
+              <span class="block">${item.phrase[0]}</span>
+              <span class="block">${item.phrase[1]}</span>
+              <span class="block">${item.phrase[2]}</span>
+            </div>
+            
+            <!-- 詠み人 -->
+            <div class="text-xs text-right text-slate-400 font-medium tracking-wider mt-1.5 group-hover:text-slate-600 transition-colors">
+              <span class="inline-block bg-slate-50 border border-slate-100 px-1.5 py-0.5 rounded text-[10px] text-slate-500 mr-1.5 font-normal">
+                課題吟：緩む
+              </span>
+              ― ${item.author}
+            </div>
+          </div>
+        `;
+
+        // クリックイベントの登録
+        card.addEventListener('click', () => openModal(item));
+        grid.appendChild(card);
+      });
+    }
+
+    // モーダルのDOM要素
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modal-content');
+    const modalSenryu = document.getElementById('modal-senryu');
+    const modalAuthor = document.getElementById('modal-author');
+    const modalPoint = document.getElementById('modal-point');
+    const modalCommentary = document.getElementById('modal-commentary');
+
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const closeModalFooterBtn = document.getElementById('close-modal-footer-btn');
+
+    // モーダルを開く関数
+    function openModal(item) {
+      // データの差し込み
+      modalSenryu.innerHTML = `
+        <span class="block sm:inline sm:mr-4">${item.phrase[0]}</span>
+        <span class="block sm:inline sm:mr-4">${item.phrase[1]}</span>
+        <span class="block sm:inline">${item.phrase[2]}</span>
+      `;
+      modalAuthor.textContent = `詠み人：${item.author}`;
+      modalPoint.textContent = item.point;
+      modalCommentary.textContent = item.commentary;
+
+      // モーダルの表示処理 (アニメーション付き)
+      modal.classList.remove('hidden');
+      // 少し遅延させて不透明度とスケールを変更することでフェードインアニメーションにする
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modalContent.classList.remove('scale-95');
+        modalContent.classList.add('scale-100');
+      }, 10);
+      document.body.classList.add('overflow-hidden'); // 背景のスクロール防止
+    }
+
+    // モーダルを閉じる関数
+    function closeModal() {
+      modal.classList.add('opacity-0');
+      modalContent.classList.remove('scale-100');
+      modalContent.classList.add('scale-95');
+      
+      // アニメーション完了後に完全に隠す
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }, 300);
+    }
+
+    // イベントリスナー
+    closeModalBtn.addEventListener('click', closeModal);
+    closeModalFooterBtn.addEventListener('click', closeModal);
+
+    // モーダルの外側（背景）をクリックした時に閉じる
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // キーボードのEscキーで閉じる
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+
+    // 読み込み完了時にカードを生成
+    window.onload = function() {
+      createSenryuCards();
+    };
+  </script>
+</body>
+</html>
