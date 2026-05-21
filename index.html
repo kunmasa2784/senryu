@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>川柳創作における10のポイント</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Serif JP (明朝) & Inter (サンセリフ) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Serif JP', serif;
+        }
+        .serif-title {
+            font-family: 'Noto Serif JP', serif;
+        }
+    </style>
+</head>
+<body class="bg-[#faf9f6] text-slate-800 antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+
+    <article class="prose prose-slate max-w-none">
+        <header class="mb-12 text-center sm:text-left border-b border-slate-200 pb-8">
+            <h1 class="serif-title text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight">
+                日常を切り取る17音：<br class="hidden sm:inline">川柳創作における10のポイント
+            </h1>
+        </header>
+
+        <!-- アブストラクト (Abstract) 風のコラム -->
+        <div class="bg-emerald-50/50 border-l-4 border-emerald-700 p-6 rounded-r-xl mb-12 shadow-sm">
+            <h2 class="serif-title text-lg font-bold text-emerald-950 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                抄録 (Abstract)
+            </h2>
+            <p class="text-slate-700 text-sm leading-relaxed serif-title">
+                川柳は、俳句と同じ「五・七・五（17音）」の定型詩でありながら、季語の束縛を脱し、人間の心理、社会の縮図、日常生活の滑稽さをユーモアと風刺をもって活写する特有の詩形態である。本稿では、詩作初心者から中級者に向けて、創作のハードルを下げつつ作品の芸術性を向上させるための10の構造的技法を、具体例を交えながら体系的に解説する。また、後半には即時的な音数検証を可能にするデジタルツールを配置し、創作における音韻律動の可視化を試みる。
+            </p>
+        </div>
+
+        <div class="space-y-8 text-slate-800 leading-relaxed text-base sm:text-lg">
+            <p class="serif-title first-letter:text-5xl first-letter:font-extrabold first-letter:text-emerald-700 first-letter:mr-3 first-letter:float-left">
+                言葉は、最も身近な芸術です。中でも「川柳」は、カメラのシャッターを切るように日常の一瞬を5・7・5の17音に閉じ込める、きわめて軽快で洗練された文芸表現です。俳句のような「季節の縛り（季語）」がないため、今日感じたこと、クスッと笑ってしまったことをそのままアートに昇華させることができます。
+            </p>
+            <p>
+                以下に、あなたの日常を色鮮やかな作品に変えるための**10の技法（ポイント）**を、論理的かつ直感的に解説します。
+            </p>
+        </div>
+
+        <div class="mt-16 space-y-10">
+            
+            <!-- ポイント 1 -->
+            <section class="border-l-4 border-emerald-600 pl-5 py-1">
+                <div class="mb-2">
+                    <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold tracking-wider px-2 py-0.5 rounded font-mono">POINT 01</span>
+                </div>
+                <h3 class="serif-title text-xl font-bold text-slate-900 mb-3">
+                    「五・七・五（17音）」のリズム論：拍（モーラ）の計測
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                    川柳の骨格は「5音・7音・5音」の心地よいビートです。日本語を声に出したときの音を指を折りながらカウントします。
+                </p>
+                <div class="bg-amber-50/60 border-l-2 border-amber-500 p-4 rounded-r-lg text-sm text-slate-700 space-y-2">
+                    <p>💡 <strong>特殊な音の数え方ルール：</strong></p>
+                    <ul class="list-disc pl-5 space-y-1 text-xs">
+                        <li>長音「ー」（チョコレート → ちょ・こ・れー・と＝4音）</li>
+                        <li>促音「っ」（切符 → き・っ・ぷ＝3音）</li>
+                        <li>撥音「ん」（パン → ぱ・ん＝2音）</li>
+                        <li>拗音「ゃゅょ」（お茶 → お・ちゃ＝2音 ※「ちゃ」で1つの音）</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ポイント 2 -->
+            <section class="border-l-4 border-emerald-600 pl-5 py-1">
+                <div class="mb-2">
+                    <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold tracking-wider px-2 py-0.5 rounded font-mono">POINT 02</span>
+                </div>
+                <h3 class="serif-title text-xl font-bold text-slate-900 mb-3">
+                    無季の自由：季節の足枷を脱ぐ
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    俳句を縛る「季語」は、川柳では不要です。桜が散っていなくても、雪が積もっていなくても、あなたの心が動いた「その瞬間」を一年中いつでも、そのままの温度で描写することができます。
+                </p>
+            </section>
+
+            <!-- ポイント 3 -->
+            <section class="border-l-4 border-emerald-600 pl-5 py-1">
+                <div class="mb-2">
+                    <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold tracking-wider px-2 py-0.5 rounded font-mono">POINT 03</span>
+                </div>
+                <h3 class="serif-title text-xl font-bold text-slate-900 mb-3">
+                    主題の選定：主役は常に「人間」である
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    俳句が自然の美を詠むのに対し、川柳は「人間そのもの」を詠みます。家族のクスッと笑える一面、職場の微妙な人間関係、自分自身の愚かさや愛らしさなど、人間の営みがすべて最高のモチーフになります。
+                </p>
+            </section>
+
+            <!-- ポイント 4 -->
+            <section class="border-l-4 border-emerald-600 pl-5 py-1">
+                <div class="mb-2">
+                    <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold tracking-wider px-2 py-0.5 rounded font-mono">POINT 04</span>
+                </div>
+                <h3 class="serif-title text-xl font-bold text-slate-900 mb-3">
+                    滑稽と風刺：ユーモアとチクリとした棘の調和
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    思わず頬を緩める「おかしみ」や、社会への「皮肉（風刺）」が川柳を輝かせます。特におすすめなのは**自虐ネタ**。誰も傷つけることなく、最大の共感と笑いを生み出す魔法のスパイスです。
+                </p>
+                <div class="mt-3 bg-slate-100/80 p-3 rounded text-sm italic text-slate-700 border-l-4 border-slate-400 serif-title">
+                    「ダイエット 明日からだと 言い続け」 <span class="text-xs text-slate-500 font-sans not-italic">（自虐の代表例）</span>
+                </div>
+            </section>
+
+            <!-- ポイント 5 -->
+            <section class="border-l-4 border-emerald-600 pl-5 py-1">
+                <div class="mb-2">
+                    <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold tracking-wider px-2 py-0.5 rounded font-mono">POINT 05</span>
+                </div>
+                <h3 class="serif-title text-xl font-bold text-slate-900 mb-3">
+                    共感値の設計：普遍的な「あるある」の切り出し
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    読者が「そうそう、それ私だ！」と思える要素を切り取りましょう。個人的すぎる事件よりも、誰もが一度は体験したことのある「ささやかな錯覚」や「生活のズレ」が共感を呼びます。
+                </p>
+                <div class="mt-3 bg-slate-100/80 p-3 rounded text-sm italic text-slate-700 border-l-4 border-slate-400 serif-title">
+                    「スマホ下げ 探すスマホを 手に握り」 <span class="text-xs text-slate-500 font-sans not-italic">（日常の錯覚例）</span>
+                </div>
+            </section>
+
+            <!-- ポイント 6 -->
+            <section class="border-l-4 border-emerald-600 pl-5 py-1">
+                <div class="mb-2">
+                    <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold tracking-wider px-2 py-0.5 rounded font-mono">POINT 06</span>
+                </div>
+                <h3 class="serif-title text-xl font-bold text-slate-900 mb-3">
+                    口語の採用：生きている話し言葉で織る
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    難しい専門用語や古い文語（古文のような言葉）を使う必要はありません。あなたが普段、友人や家族とお茶を飲みながら話している「話し言葉（口語）」を使うことで、刃のように鋭く、また優しく心に届く詩になります。
+                </p>
+            </section>
+
+            <!-- ポイント 7 -->
+            <section class="border-l-4 border-emerald-600 pl-5 py-1">
+                <div class="mb-2">
+                    <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold tracking-wider px-2 py-0.5 rounded font-mono">POINT 07</span>
+                </div>
+                <h3 class="serif-title text-xl font-bold text-slate-900 mb-3">
+                    観察者の視座：日常をスクラップするメモの習慣
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    一流の川柳作家は、一流の「観察者」です。「おや？」と思った違和感、家族の奇妙な行動、通勤電車で見かけた不思議な風景。これらをスマートフォンの片隅に3行でメモしておく。それがそのまま、世界に一つだけの創作ノートになります。
+                </p>
+            </section>
+
+            <!-- ポイント 8 -->
+            <section class="border-l-4 border-emerald-600 pl-5 py-1">
+                <div class="mb-2">
+                    <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold tracking-wider px-2 py-0.5 rounded font-mono">POINT 08</span>
+                </div>
+                <h3 class="serif-title text-xl font-bold text-slate-900 mb-3">
+                    修辞技法：比喩とオノマトペによる映像化
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    感情を「悲しい」「イライラする」と直接説明するのは避けましょう。代わりに比喩（〜のような）や、オノマトペ（ドキドキ、どんより）を使うことで、17音の制限のなかで、読者の脳内に色彩豊かな映像がフワリと立ち上がります。
+                </p>
+            </section>
+
+            <!-- ポイント 9 -->
+            <section class="border-l-4 border-emerald-600 pl-5 py-1">
+                <div class="mb-2">
+                    <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold tracking-wider px-2 py-0.5 rounded font-mono">POINT 09</span>
+                </div>
+                <h3 class="serif-title text-xl font-bold text-slate-900 mb-3">
+                    余白の創出：説明をそぎ落とす美学
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    「〜だから」「〜だけど」といった接続詞や、「私は」という明らかな主語は、文字数の浪費につながります。これらを思い切ってカットすることで、読者が「想像で穴埋めする楽しみ（余白）」が生まれ、作品に深みと知的な余韻が宿ります。
+                </p>
+            </section>
+
+            <!-- ポイント 10 -->
+            <section class="border-l-4 border-emerald-600 pl-5 py-1">
+                <div class="mb-2">
+                    <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold tracking-wider px-2 py-0.5 rounded font-mono">POINT 10</span>
+                </div>
+                <h3 class="serif-title text-xl font-bold text-slate-900 mb-3">
+                    音読による検証：身体性調律の最終工程
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    紙に書いただけでは、本当のリズムはわかりません。推敲の最後には、必ず口に出して3回読み上げてください。喉に引っかかる感じはないか、呼吸のタイミングと合致しているか。滑らかに言葉が転がり出るとき、その川柳は完成を迎えます。
+                </p>
+            </section>
+
+        </div>
+
+        <div class="mt-16 bg-[#f0f4f1] border border-emerald-900/10 rounded-2xl p-6 sm:p-8 shadow-sm">
+            <h3 class="serif-title text-2xl font-bold text-emerald-950 mb-3">
+                [実験ツール] 川柳ラボ：音数カウントシミュレーター
+            </h3>
+            <p class="text-xs text-emerald-800 mb-6 font-medium leading-relaxed">
+                あなたの思いついた言葉を試しに入力してみましょう。ひらがなに変換したときの簡易的な音数を視覚化し、創作のリズム調整をサポートします。（※簡易判定のため、拗音などの組み合わせによって微小な誤差が生じる場合があります）
+            </p>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2" for="senryu-input">
+                        言葉をひらがな（またはカタカナ）で入力
+                    </label>
+                    <input 
+                        type="text" 
+                        id="senryu-input" 
+                        placeholder="すまほさげ さがすすまほを てににぎり" 
+                        class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-mono"
+                    >
+                </div>
+
+                <!-- 結果ディスプレイ -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <div class="bg-white p-4 rounded-lg border border-slate-200 flex flex-col justify-center">
+                        <span class="text-xs text-slate-500 font-medium">現在の総音数（目安）</span>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span id="char-count" class="text-4xl font-extrabold text-emerald-700 font-mono">0</span>
+                            <span class="text-slate-500 text-sm">音</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-slate-200">
+                        <span class="text-xs text-slate-500 font-medium font-mono">リズム評価</span>
+                        <p id="rhythm-feedback" class="text-sm font-semibold text-slate-700 mt-2">
+                            文字を入力すると解析を開始します。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 結びのセクション -->
+        <div class="mt-16 pt-10 border-t border-slate-200 space-y-6">
+            <h4 class="serif-title text-lg font-bold text-slate-900">
+                おわりに
+            </h4>
+            <p class="text-slate-600 text-sm leading-relaxed">
+                川柳の真髄は、ルールに縛られることではなく、日常の中の「愛すべき小さなエラー」を面白がることです。完璧な17音を目指すあまり、あなたの瑞々しい視点が薄れてしまっては本末転倒です。多少の字余りや字足らずは、その作品の個性（味）となります。まずは、あなたの机の上、スマートフォンの画面、今日の夕食のおかずから、自由な視点で一句、紡いでみてください。
+            </p>
+        </div>
+
+    </article>
+</div>
+
+<script>
+    // 簡易的な日本語モーラ数（音数）カウントロジック
+    // ※入力はひらがな、カタカナ、一部の英数字を想定しています。
+    const inputField = document.getElementById('senryu-input');
+    const charCountEl = document.getElementById('char-count');
+    const feedbackEl = document.getElementById('rhythm-feedback');
+
+    inputField.addEventListener('input', (e) => {
+        const text = e.target.value.trim();
+        if (text === '') {
+            charCountEl.textContent = '0';
+            feedbackEl.textContent = '文字を入力すると解析を開始します。';
+            feedbackEl.className = "text-sm font-semibold text-slate-700 mt-2";
+            return;
+        }
+
+        // 簡易モーラ（音数）計算
+        // 拗音（や・ゆ・よ等の小書き文字）をカウントから除外するための処理
+        // 「きゃ、きゅ、きょ、しゃ、しゅ、しょ」などを1音とするため、小書き文字(ゃゅょ等)を一時的に無視
+        let processedText = text
+            .replace(/[ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ]/g, ''); // 拗音・促音以外の小書きを1音としてまとめずに消す（親文字とセットで1音とするため、小書き文字のみを消去して親文字を残す）
+
+        // ※促音「っ/ッ」は1音として数えるため、ここでは除去しません。
+        const count = processedText.length;
+
+        charCountEl.textContent = count;
+
+        // リズム評価の算出
+        if (count === 17) {
+            feedbackEl.textContent = '✨ 完璧な17音です！見事な定型律動を刻んでいます。';
+            feedbackEl.className = "text-sm font-bold text-emerald-700 mt-2";
+        } else if (count >= 15 && count <= 19) {
+            feedbackEl.textContent = `👍 ほぼ定型（${count}音）の範囲内です。多少の「字余り」「字足らず」として許容され、味わい深い響きになります。`;
+            feedbackEl.className = "text-sm font-semibold text-amber-700 mt-2";
+        } else if (count < 15) {
+            feedbackEl.textContent = `📝 少し短め（${count}音）です。もう少し言葉を補って、五・七・五のリズムに近づけてみましょう。`;
+            feedbackEl.className = "text-sm font-normal text-slate-600 mt-2";
+        } else {
+            feedbackEl.textContent = `📝 少し長め（${count}音）です。接続詞や不要な主語をそぎ落として「余白」を作ってみましょう。`;
+            feedbackEl.className = "text-sm font-normal text-slate-600 mt-2";
+        }
+    });
+</script>
+
+</body>
+</html>
