@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自由吟 川柳句会 評価一覧</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    /* 細かなカスタマイズ：行間の極限の微調整用 */
+    .senryu-text {
+      line-height: 1.25;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
+          <i class="fa-solid fa-pen-fancy text-lg"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-wider text-slate-900">「自由吟」川柳句会</h1>
+          <p class="text-xs text-slate-500">投句一覧（詠み人順）と詳細講評</p>
+        </div>
+      </div>
+      <!-- 簡易スタッツとフィルター -->
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+        <div class="text-xs bg-slate-100 px-3 py-1.5 rounded-full text-slate-600 font-medium">
+          総投句数: <span id="total-count" class="font-bold text-indigo-600">0</span> 句
+        </div>
+        <div class="relative w-full sm:w-48">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 text-slate-400">
+            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+          </span>
+          <input type="text" id="search-input" placeholder="詠み人・句を検索..." class="w-full pl-8 pr-3 py-1 text-xs border border-slate-300 rounded-md focus:outline-none focus:border-indigo-500 transition-colors">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl mx-auto px-4 py-4 w-full">
+    <div class="mb-4 bg-indigo-50/50 border border-indigo-100 rounded-lg p-3 text-xs text-indigo-800 flex items-start gap-2.5">
+      <i class="fa-solid fa-circle-info mt-0.5 text-indigo-500"></i>
+      <div>
+        <span class="font-bold">鑑賞のヒント:</span> 各川柳カードをクリックすると、その句の「詳しい解釈（鑑賞）」や「評価のポイント・添削案」がポップアップで表示されます。ぜひ推敲の過程もお楽しみください。
+      </div>
+    </div>
+
+    <!-- 川柳カードのグリッドレイアウト（横4列） -->
+    <div id="senryu-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+      <!-- JavaScriptで動的に生成されます -->
+    </div>
+
+    <!-- 検索で見つからない場合のプレースホルダー -->
+    <div id="no-results" class="hidden flex flex-col items-center justify-center py-12 text-slate-400">
+      <i class="fa-regular fa-folder-open text-4xl mb-3"></i>
+      <p class="text-sm">該当する川柳が見つかりませんでした。</p>
+    </div>
+  </main>
+
+  <footer class="bg-slate-900 text-slate-400 text-xs py-4 border-t border-slate-800 text-center mt-auto">
+    <p>© 2026 「自由吟」川柳句会評価委員会. All Rights Reserved.</p>
+  </footer>
+
+  <div id="detail-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300 px-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300 flex flex-col border border-slate-200">
+      
+      <!-- モーダルヘッダー -->
+      <div class="p-4 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded-full">評定カード</span>
+          <span id="modal-id" class="text-xs text-slate-400">No.0</span>
+        </div>
+        <button id="modal-close-btn" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- モーダルメインコンテンツ -->
+      <div class="p-6 space-y-5 flex-grow">
+        
+        <!-- 川柳の大きな表示 -->
+        <div class="text-center py-6 px-4 bg-gradient-to-br from-slate-50 to-indigo-50/30 rounded-lg border border-slate-100 relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 to-indigo-600"></div>
+          <div id="modal-phrase" class="text-xl sm:text-2xl font-bold tracking-widest text-slate-800 leading-snug space-y-1">
+            <!-- 動的挿入 -->
+          </div>
+          <div id="modal-author" class="mt-3 text-slate-500 text-sm font-medium">
+            <!-- 動的挿入 -->
+          </div>
+        </div>
+
+        <!-- 添削比較エリア（必要な場合のみ表示） -->
+        <div id="modal-correction-box" class="hidden bg-amber-50/50 border border-amber-200/60 rounded-lg p-4 space-y-3">
+          <h4 class="text-xs font-bold text-amber-800 flex items-center gap-1.5">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> 添削のアプローチ・提案
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="bg-white p-2.5 rounded border border-amber-100">
+              <span class="block text-[10px] text-slate-400 font-bold mb-1">【原句】</span>
+              <p id="modal-original-phrase" class="font-medium text-slate-700"></p>
+            </div>
+            <div class="bg-gradient-to-br from-emerald-50 to-teal-50/50 p-2.5 rounded border border-emerald-100">
+              <span class="block text-[10px] text-emerald-600 font-bold mb-1">【推敲・添削案】</span>
+              <p id="modal-suggested-phrase" class="font-bold text-emerald-800"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 解釈・鑑賞 -->
+        <div class="space-y-1.5">
+          <h4 class="text-sm font-bold text-indigo-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-book-open"></i> 句の解釈・鑑賞
+          </h4>
+          <p id="modal-interpretation" class="text-xs sm:text-sm text-slate-600 leading-relaxed bg-slate-50 p-3.5 rounded-lg border border-slate-100">
+            <!-- 動的挿入 -->
+          </p>
+        </div>
+
+        <!-- 評価のポイント -->
+        <div class="space-y-1.5">
+          <h4 class="text-sm font-bold text-purple-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-star"></i> 評価のポイント・アドバイス
+          </h4>
+          <p id="modal-points" class="text-xs sm:text-sm text-slate-600 leading-relaxed bg-slate-50 p-3.5 rounded-lg border border-slate-100">
+            <!-- 動的挿入 -->
+          </p>
+        </div>
+
+      </div>
+
+      <!-- モーダルフッター -->
+      <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+        <button id="modal-bottom-close-btn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-md text-xs font-medium tracking-wider transition-colors shadow-sm">
+          閉じる
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // 川柳データ構造の定義
+    const senryuList = [
+      {
+        id: 1,
+        author: "啓子",
+        phrase: ["母の日の", "肩たたき券", "懐かしい"],
+        interpretation: "昭和・平成の定番だった「肩たたき券」を取り上げ、現代の子供たちの間では見られなくなった時代の移り変わりを「懐かしい」の一言に込めた哀愁漂う佳句です。",
+        points: "「懐かしい」の漢字の書き間違い（りっしんべん、つくりの衣や目などのディテール）に注意を払うと、作品としての完成度がさらに高まります。",
+        hasCorrection: false,
+        original: null,
+        correction: null
+      },
+      {
+        id: 2,
+        author: "ひろみつ",
+        phrase: ["死の商人", "首相自ら", "なりたがり"],
+        interpretation: "平和主義や軍縮の流れに反し、防衛・武器輸出などに関与していこうとするリーダーの姿勢への鋭い政治的批判が込められています。",
+        points: "「〜たがり」という少し言葉を濁す名詞的な表現よりも、動詞の終止形「成りたがる」と言い切る（断定する）ことで、作者の政治に対する批判の刃が真っ直ぐに突き刺さるようになります。",
+        hasCorrection: true,
+        original: "死の商人 首相自ら なりたがり",
+        correction: "死の商人 首相自ら 成りたがる"
+      },
+      {
+        id: 3,
+        author: "純子",
+        phrase: ["川柳と同じ", "中八体型も"],
+        displayPhrase: ["川柳と", "同じ中八", "体型も"], // 五七五で整えて表示
+        interpretation: "川柳・短歌の禁じ手である「中八（中句が八音の字余りになること）」と、お腹周りのぽっちゃりした「中っ腹・メタボ体型」を掛け合わせた見事なユーモアです。",
+        points: "愛好家同士にしか伝わらない「楽屋落ち（身内ネタ）」だからこそ、「あら嫌だ」といった説明的な感情は入れず、シンプルに「中八（体型）」であることを際立たせる構成にすることで、知的なおかしみが洗練されます。",
+        hasCorrection: false,
+        original: null,
+        correction: null
+      },
+      {
+        id: 4,
+        author: "さち",
+        phrase: ["母の日に", "海老で鯛釣る", "子供たち"],
+        interpretation: "母の日にカーネーションなどのささやかなプレゼント（海老）を贈っておきながら、その後に美味しいごちそうやお小遣い（鯛）を期待している逞しい子供たちを描いています。",
+        points: "家族の日常をちくりと刺す、温かみのある皮肉が秀逸です。誰もが思わずニヤリとしてしまう、普遍的な親子の力関係が映し出されています。",
+        hasCorrection: false,
+        original: null,
+        correction: null
+      },
+      {
+        id: 5,
+        author: "斎木",
+        phrase: ["円安の", "外貨余剰で", "油買う"],
+        interpretation: "円安というマクロ経済の動向が、ガソリンや灯油、食用油といった極めて身近な家計負担に直結している現実を淡々と詠んでいます。",
+        points: "生活に直接響く生々しい経済風刺であり、ニュースの数字ではなく「油買う」という極めて実生活的な行為で切り取ったことで、庶民のリアルなため息が聞こえる時事句となっています。",
+        hasCorrection: false,
+        original: null,
+        correction: null
+      },
+      {
+        id: 6,
+        author: "しず",
+        phrase: ["席譲る", "若年寄が", "先輩に"],
+        interpretation: "江戸時代の官職名である「若年寄」を「まだ若いと思っている高齢者（前期高齢者）」の意味で使い、さらに年上の先輩に席を譲るというユーモラスな一幕を切り取っています。",
+        points: "「若年寄」は本来の役職名や一般的な辞書的意味（若いくせに老け込んでいる人）とは異なるため、やや伝わりにくい難点があります。現代の超高齢社会ならではの「老老譲り」などの言葉に置き換えることで、より微笑ましくも切実な光景がスッキリ伝わります。",
+        hasCorrection: true,
+        original: "席譲る 若年寄 が先輩に",
+        correction: "席譲る 老老（ろうろう）譲り 先輩に （または「老老の 譲り合い」など）"
+      },
+      {
+        id: 7,
+        author: "まさかず",
+        phrase: ["ネトフリの", "解約できず", "映画沼"],
+        interpretation: "サブスク（Netflix）を解約するタイミングを逃し、次々とリコメンドされる魅力的な作品を見て抜け出せなくなる状態を描写しています。",
+        points: "トレンドワードである「沼（ハマる・依存する）」を使って現代社会の日常あるあるを表現しています。現代的で新鮮な言葉選びが際立つ一句です。",
+        hasCorrection: false,
+        original: null,
+        correction: null
+      },
+      {
+        id: 8,
+        author: "葉月",
+        phrase: ["三番瀬", "広い海岸", "潮干狩"],
+        interpretation: "三番瀬の豊かな自然と、潮干狩りに集まる人々の開放的な様子が明るく詠み込まれています。",
+        points: "本当は「バードウォッチング（9音）」を入れたかったものの、音数制限（五・七・五）のために断念したとのこと。「鳥を見に」と和語に優しく言い換える、あるいは鳥を観察する専門的な意味を持つあえて古い言葉「単鳥（たんちょう）」を活用してみるなど、音数制限の中で何を諦め、どう言葉をチョイスするかの葛藤と工夫が見える興味深い作品です。",
+        hasCorrection: false,
+        original: null,
+        correction: null
+      },
+      {
+        id: 9,
+        author: "たけちゃん",
+        phrase: ["ナフサなく", "日々の暮しに", "影おとす"],
+        interpretation: "プラスチック原料である「ナフサ」の不足が、巡り巡って自治体の指定ゴミ袋の品薄など、私たちの生活に具体的な不便をもたらしている不気味さを表現しています。",
+        points: "グローバルな化学原料のニュースが、ミクロな日々の暮らしに落とす影を非常にタイムリーに切り取った、社会派の鋭い観察眼が活きた一句です。",
+        hasCorrection: false,
+        original: null,
+        correction: null
+      },
+      {
+        id: 10,
+        author: "びいき",
+        phrase: ["さあ出番", "雷神様が", "踊り出す"],
+        interpretation: "失言やスキャンダルなどで世間を騒がせる「大臣（だいじん）」を、天災・嵐をもたらす「雷神（らいじん）様」と皮肉っぽく重ね合わせています。",
+        points: "あえて「大臣“様”（雷神様）」と過剰に敬称を使ったり、句頭に「さあ出番」という煽るような呼びかけを持ってきたりすることで、そのお調子者ぶりや滑稽さがデフォルメされ、風刺効果が何倍にも跳ね上がっています。",
+        hasCorrection: false,
+        original: null,
+        correction: null
+      },
+      {
+        id: 11,
+        author: "おしげ",
+        phrase: ["真夜中に", "足つりイスで", "白湯タイム"],
+        interpretation: "夜中に突然足が攣（つ）るというシニア世代の普遍的な「あるある」を捉えています。痛みに顔をしかめながら、なんとか立ち上がって白湯を用意する一コマです。",
+        points: "痛みをこらえて椅子に腰掛け、心を落ち着かせるために白湯をすする一連の具体的かつリアルな動作描写が、読み手に対して強い生活感と深い共感を呼び起こします。",
+        hasCorrection: false,
+        original: null,
+        correction: null
+      },
+      {
+        id: 12,
+        author: "春栄",
+        phrase: ["夜のヨガ", "屍ポーズで", "寝落ちする"],
+        interpretation: "心身をリラックスさせるための夜のヨガ。最後に行う「屍（しかばね）のポーズ（シャバアーサナ）」があまりにも心地よく、そのまま深い眠りに落ちてしまう穏やかな日常です。",
+        points: "原句の「〜する（動詞）」で終わる事務的な報告を、構成をひっくり返して「夜のヨガ」という名詞結び（体言止め）にすることで、ヨガが終わった後の静かな空気感や、そのまま眠りに落ちていく心地よい「余韻」がふわっと広がるようになります。",
+        hasCorrection: true,
+        original: "夜のヨガ 屍ポーズで 寝落ちする",
+        correction: "屍（しかばね）の ポーズで寝落ち 夜のヨガ"
+      },
+      {
+        id: 13,
+        author: "邦さん",
+        phrase: ["落選も", "議員が子分", "一郎は"],
+        interpretation: "長年、政界のキングメーカーとして君臨し、落選を経験してもなお強大な影響力を誇る小沢一郎氏を取り巻く人間関係や、権力のしぶとさを冷徹に風刺しています。",
+        points: "「一郎」という極めて明確な固有名詞を入れることで、その人物の持つ世間のイメージを瞬時に共有させ、権力構造の滑稽さを浮き彫りにするパワーのある句です。",
+        hasCorrection: false,
+        original: null,
+        correction: null
+      },
+      {
+        id: 14,
+        author: "かみこ",
+        phrase: ["もうこれで", "終わり終わりと", "旅に出た"],
+        interpretation: "「もうこれで最後」と何度も自分に言い聞かせながら、やはり誘惑に抗えず、あるいは心の整理をつけるために再び旅へ出てしまう人間の愛おしい矛盾が描かれています。",
+        points: "「終わり」を「終える」とすることで、人生の区切りをつけて旅立つ「覚悟」が際立ちます。また、結びを「また旅に」とすることで、「これからもまた、ふらりと旅に出るのだろう」という、読者に余白を残す風情ある表現になります。",
+        hasCorrection: true,
+        original: "もうこれで 終わり終わり と旅に出た",
+        correction: "【案A】もうこれで 終える と旅に出た<br>【案B】もうこれで 終わり終わりと また旅に"
+      },
+      {
+        id: 15,
+        author: "ちゑ",
+        phrase: ["母の味", "記憶でたどり", "野菜煮る"],
+        interpretation: "亡き母、あるいは遠く離れた母の作ってくれたあの味を、おぼろげな記憶のレシピを頼りに自ら野菜を煮て再現しようとしている、温かくも切ない自炊の一コマです。",
+        points: "「野菜をトントンと煮ている（現在の動作）」という映像がまず浮かび、そこから「そういえばお母さんはどう味付けしていたっけ…？」と回想に入り、最後に「母の味」という感動の中心に着地する。語順を整理しただけで、心の動きが非常に情感豊かに表現されます。",
+        hasCorrection: true,
+        original: "母の味 記憶でたどり 野菜煮る",
+        correction: "野菜煮る 記憶でたどり 母の味"
+      }
+    ];
+
+    const gridContainer = document.getElementById('senryu-grid');
+    const totalCountEl = document.getElementById('total-count');
+    const searchInput = document.getElementById('search-input');
+    const noResultsEl = document.getElementById('no-results');
+
+    // モーダル要素
+    const modal = document.getElementById('detail-modal');
+    const modalId = document.getElementById('modal-id');
+    const modalPhrase = document.getElementById('modal-phrase');
+    const modalAuthor = document.getElementById('modal-author');
+    const modalCorrectionBox = document.getElementById('modal-correction-box');
+    const modalOriginalPhrase = document.getElementById('modal-original-phrase');
+    const modalSuggestedPhrase = document.getElementById('modal-suggested-phrase');
+    const modalInterpretation = document.getElementById('modal-interpretation');
+    const modalPoints = document.getElementById('modal-points');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const modalBottomCloseBtn = document.getElementById('modal-bottom-close-btn');
+
+    // 初期カウント設定
+    totalCountEl.textContent = senryuList.length;
+
+    function renderSenryu(dataList) {
+      gridContainer.innerHTML = '';
+      
+      if (dataList.length === 0) {
+        noResultsEl.classList.remove('hidden');
+        return;
+      } else {
+        noResultsEl.classList.add('hidden');
+      }
+
+      dataList.forEach(item => {
+        // 表示用の句の配列（displayPhraseが定義されていればそれを使用）
+        const phrasesToDisplay = item.displayPhrase || item.phrase;
+        
+        // カード要素の作成
+        const card = document.createElement('div');
+        // 要求仕様: 上下の空白が少なく、文字の行間も詰めた、ホバー時に浮き上がる紫→藍グラデ極細線入りカード
+        card.className = "bg-white rounded-lg shadow-sm hover:shadow-md border border-slate-200/60 overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all duration-300 flex flex-col relative min-h-[135px] h-auto group";
+        
+        // グラデーションアクセント線
+        const accentLine = document.createElement('div');
+        accentLine.className = "h-[3px] bg-gradient-to-r from-purple-500 to-indigo-600 w-full";
+        card.appendChild(accentLine);
+
+        // コンテンツ部分
+        const cardBody = document.createElement('div');
+        cardBody.className = "p-3 flex flex-col justify-between h-full text-slate-800 flex-grow";
+
+        // 句の横書き表示（文字サイズを13pxから16pxへと大きく調整）
+        const phraseContainer = document.createElement('div');
+        phraseContainer.className = "senryu-text text-[15px] sm:text-[16px] font-bold text-slate-900 tracking-wider space-y-0.5 leading-tight";
+        
+        phrasesToDisplay.forEach(part => {
+          const partEl = document.createElement('p');
+          partEl.textContent = part;
+          phraseContainer.appendChild(partEl);
+        });
+        
+        cardBody.appendChild(phraseContainer);
+
+        // 詠み人を句の後に右寄せで記述
+        const authorContainer = document.createElement('div');
+        authorContainer.className = "text-right text-[11px] text-slate-500 font-medium group-hover:text-indigo-600 transition-colors mt-2";
+        // 添削アイコンの付与（添削案がある場合は小さなスパークルマークを表示）
+        const correctionIndicator = item.hasCorrection 
+          ? `<span class="inline-block text-[10px] bg-amber-100 text-amber-700 px-1 rounded mr-1"><i class="fa-solid fa-wand-magic-sparkles"></i> 添削</span>`
+          : '';
+        authorContainer.innerHTML = `${correctionIndicator}（${item.author}）`;
+        cardBody.appendChild(authorContainer);
+
+        card.appendChild(cardBody);
+
+        // クリックイベントの登録
+        card.addEventListener('click', () => openModal(item));
+
+        gridContainer.appendChild(card);
+      });
+    }
+
+    function openModal(item) {
+      modalId.textContent = `No. ${item.id}`;
+      
+      // 句を改行してモーダルに表示
+      modalPhrase.innerHTML = '';
+      const phrasesToDisplay = item.displayPhrase || item.phrase;
+      phrasesToDisplay.forEach(part => {
+        const p = document.createElement('p');
+        p.textContent = part;
+        modalPhrase.appendChild(p);
+      });
+
+      modalAuthor.textContent = `詠み人：${item.author}`;
+      
+      // 添削案がある場合の表示切り替え
+      if (item.hasCorrection) {
+        modalCorrectionBox.classList.remove('hidden');
+        modalOriginalPhrase.textContent = item.original;
+        modalSuggestedPhrase.innerHTML = item.correction;
+      } else {
+        modalCorrectionBox.classList.add('hidden');
+      }
+
+      modalInterpretation.textContent = item.interpretation;
+      modalPoints.textContent = item.points;
+
+      // モーダルをふわっと表示
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.firstElementChild.classList.remove('scale-95');
+      modal.firstElementChild.classList.add('scale-100');
+      document.body.style.overflow = 'hidden'; // 背面スクロールを抑止
+    }
+
+    function closeModal() {
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modal.firstElementChild.classList.remove('scale-100');
+      modal.firstElementChild.classList.add('scale-95');
+      document.body.style.overflow = ''; // スクロール再開
+    }
+
+    // モーダルのクリックイベント登録
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalBottomCloseBtn.addEventListener('click', closeModal);
+    
+    // 背景クリックで閉じる
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // キーボード（Esc）で閉じる
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('opacity-0')) {
+        closeModal();
+      }
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      const keyword = e.target.value.trim().toLowerCase();
+      if (!keyword) {
+        renderSenryu(senryuList);
+        return;
+      }
+
+      const filtered = senryuList.filter(item => {
+        const authorMatch = item.author.toLowerCase().includes(keyword);
+        const phraseMatch = item.phrase.join('').includes(keyword);
+        const interpretationMatch = item.interpretation.toLowerCase().includes(keyword);
+        const pointsMatch = item.points.toLowerCase().includes(keyword);
+        
+        return authorMatch || phraseMatch || interpretationMatch || pointsMatch;
+      });
+
+      renderSenryu(filtered);
+    });
+
+    // 初期描画の実行
+    window.onload = function() {
+      renderSenryu(senryuList);
+    };
+  </script>
+</body>
+</html>
