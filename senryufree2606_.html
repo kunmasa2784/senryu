@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>川柳句会 自由吟 評価</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-[#faf9f6] text-gray-800 min-h-screen flex flex-col">
+
+    <!-- ヘッダー -->
+    <header class="py-6 px-4 text-center bg-white border-b border-gray-100 shadow-sm">
+        <h1 class="text-2xl md:text-3xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-800 via-indigo-900 to-blue-950">
+            川柳句会 自由吟 評価
+        </h1>
+        <p class="text-[10px] md:text-xs text-indigo-600/70 tracking-widest font-bold mt-1 uppercase">June Assembly Selection Evaluation</p>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full">
+        <!-- 横4列のグリッドレイアウト -->
+        <div id="senryuGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- JavaScriptで動的にカードを挿入 -->
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="py-4 text-center text-xs text-gray-400 border-t border-gray-100 bg-white">
+        &copy; 2026 川柳句会 自由吟 評価委員会
+    </footer>
+
+    <!-- モーダルウィンドウ (ポップアップ) -->
+    <div id="modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300" onclick="closeModal()">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden relative transform scale-95 transition-all duration-300" onclick="event.stopPropagation()">
+            <!-- モーダル上部のグラデーションライン -->
+            <div class="h-[5px] bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600"></div>
+            
+            <div class="p-6 md:p-8">
+                <!-- 閉じるボタン -->
+                <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-50">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+
+                <!-- 句のポップアップ表示 -->
+                <div class="text-center mb-6">
+                    <div id="modalPhrase" class="text-xl md:text-2xl font-bold text-gray-900 leading-tight tracking-widest space-y-1">
+                        <!-- 動的挿入 -->
+                    </div>
+                    <div id="modalAuthor" class="text-xs md:text-sm text-indigo-600 font-semibold mt-3 text-right">
+                        <!-- 動的挿入 -->
+                    </div>
+                </div>
+
+                <!-- 区切り線 -->
+                <div class="border-t border-dashed border-gray-200 my-4"></div>
+
+                <!-- 解釈と評価 -->
+                <div class="space-y-4 text-sm md:text-base">
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-600 mb-1 flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>句の解釈
+                        </h4>
+                        <p id="modalInterpretation" class="text-gray-700 leading-relaxed font-normal text-xs md:text-sm pl-3 border-l-2 border-indigo-100">
+                            <!-- 動的挿入 -->
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-purple-600 mb-1 flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>評価のポイント
+                        </h4>
+                        <p id="modalEvaluation" class="text-gray-700 leading-relaxed font-normal text-xs md:text-sm pl-3 border-l-2 border-purple-100">
+                            <!-- 動的挿入 -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // 川柳データ（音声の内容および句の性質を元に作成した解釈・評価を含む）
+        const senryuData = [
+            {
+                phrase: ["八十路達", "トンチンカンが", "往き来する"],
+                author: "かみこ",
+                interpretation: "80代の高齢者同士が集まり、お互いちぐはぐで的外れな（トンチンカンな）会話を繰り広げている日常の様子。噛み合わないまま行ったり来たりする会話自体を楽しんでいる平和な高齢者の日常風景です。",
+                evaluation: "「トンチンカン」という少し滑稽な言葉を愛嬌たっぷりに表現。お互いのボケや噛み合わなさを笑い飛ばして明るく前向きに老後を生きる人々のバイタリティに共感が寄せられ、高く評価されました。"
+            },
+            {
+                phrase: ["家のタマ", "ネズミは得意", "クマは無理"],
+                author: "春栄",
+                interpretation: "飼い猫の「タマ」はネズミを捕る能力は一流だけれど、昨今ニュースを騒がせている野生の「クマ（熊）」に立ち向かうことまではさすがに無理だよ、という現実的でユーモラスな愛猫への親バカ交じりの評価です。",
+                evaluation: "世間で深刻化しているクマの出没という時事ニュースと、身近なペット「タマ」を対比させた構成が秀逸。限界をユーモラスに認めつつもタマを愛おしむ温かい視線が、笑いを誘う魅力的な作品です。"
+            },
+            {
+                phrase: ["雨宿り", "横目に雨を", "躍り抜け"],
+                author: "まさかず",
+                interpretation: "暗い空の下、軒先で縮こまって雨宿りしている人たちを脇目に見ながら、自分は雨に恐れることなく、まるでステップを踏むかのように軽快に雨の中を走り抜けていくという生命力あふれる様子です。",
+                evaluation: "雨の陰鬱さを吹き飛ばすような「躍り抜け」の一言が素晴らしいです。静かに立ち止まる周囲の情景と、雨をもエネルギーに変えるかのような動的な主観が見事なコントラストを成しています。"
+            },
+            {
+                phrase: ["熊も我も", "都会の暮らし", "夢を見た"],
+                author: "邦さん",
+                interpretation: "都会に憧れて山を下り人里（都会）に迷い込んできてしまった野生の熊と、かつて希望や夢を抱いて大都会へと進出し、現実の厳しさに直面している自分の姿を哀愁を込めて重ね合わせています。",
+                evaluation: "熊の出没ニュースを社会的な切り口だけでなく、個人の哀愁漂う人生論へと落とし込んだ着眼点が非常に深いです。都会に生きる厳しさと、熊への一抹の優しさがブレンドされた味わい深い傑作です。"
+            },
+            {
+                phrase: ["国旗など", "持たぬ触らず", "近寄らず"],
+                author: "ひろみつ",
+                interpretation: "主義主張の対立やナショナリズムの象徴である「国旗」などの政治的な喧騒に対し、あえて関わることなく、自らの平穏のために一定の距離を置いてやり過ごそうとする現代の庶民のスタンスです。",
+                evaluation: "「持たぬ」「触らず」「近寄らず」という「三ない運動」のような小気味良いテンポが抜群です。社会の波風を避けて静かに平和に暮らしたいという、庶民の本音と知恵が皮肉を交えて見事に表現されています。"
+            },
+            {
+                phrase: ["年金日", "寄りそう傘の", "雨の音"],
+                author: "ちゑ",
+                interpretation: "待ちに待った年金支給日の雨の日、生活のための買い物に出かける老夫婦。一本の傘を共有して寄り添い歩く二人の耳に、ただ優しく包み込むような雨の音が響いているという温かな情景です。",
+                evaluation: "生活の匂いがする「年金日」と、寄り添う二人のロマンチックな情景、そしてそれらを優しく包み込む「雨の音」のバランスが奇跡的に美しいです。つつましくとも深い夫婦愛が伝わる叙情あふれる秀作です。"
+            },
+            {
+                phrase: ["ホルムズの", "海は暫しの", "梅雨晴れの間"],
+                author: "斎木",
+                interpretation: "国際情勢が緊張し、一触即発の危機を孕んでいるホルムズ海峡。その遥か異国の海に、今だけはつかの間の梅雨晴れのような穏やかな平穏が訪れている、そんな息の詰まる一瞬の静寂を捉えています。",
+                evaluation: "大きな世界情勢（ホルムズの海）と身近な気象現象（梅雨晴れ）という異なるスケールを重ね合わせた知的な構成。静けさの中に漂う危うさを見事に描き出しています。"
+            },
+            {
+                phrase: ["青い空", "魚になった", "白いくも"],
+                author: "葉月",
+                interpretation: "どこまでも美しく広がる青空を大きな海に見立て、そこに浮かぶ形の良い白い雲が、まるで気持ちよさそうに悠々と泳いでいる魚の姿に見えたという、詩的でピュアな心の風景です。",
+                evaluation: "絵本の一ページをめくるような、純粋でみずみずしい感性に満ち溢れています。見る者の心を瞬時に洗ってくれる映像喚起力があり、濁りのない美しさが際立っています。"
+            },
+            {
+                phrase: ["クマちゃんが", "天橋立", "鬼ごっこ"],
+                author: "びいき",
+                interpretation: "日本を代表する絶景観光地「天橋立」にまで熊が出没するという異常な社会情勢を、「クマちゃん」と「鬼ごっこ」という愛らしいメルヘン調の言葉を使って捉え直した句です。",
+                evaluation: "深刻な野生動物問題を「鬼ごっこ」と表現したことによるブラックユーモア的なギャップが面白いです。平和な観光地が孕む不気味な現実と遊び心の同居に、高いセンスが感じられます。"
+            },
+            {
+                phrase: ["合唱で", "カエルと私", "ハモるかな"],
+                author: "さち",
+                interpretation: "梅雨の季節、外で大合唱を繰り広げているカエルたちの声に合わせて、「私も一緒に混ざって歌ってみたら、綺麗にハモることができるかな」と無邪気に思いを巡らせている様子です。",
+                evaluation: "雨続きで憂鬱になりがちな梅雨の音を、カエルとのセッションという楽しげな音楽表現に転換した作者の明るく朗らかな性格がにじみ出ており、ほっこりとしたおかしみがあります。"
+            },
+            {
+                phrase: ["利上げあり", "株価七万", "地震あり"],
+                author: "しず",
+                interpretation: "経済的な不安を誘う金利の利上げ、史上最高値を目指し変動する株価の喧騒、そして日々の暮らしを常に脅かす地震の発生。現代日本が抱える混沌とした激動を一気に羅列しています。",
+                evaluation: "現代の世相と日本の不安定な現状を「利上げ」「株価」「地震」という強い名詞の3拍子で簡潔に、スピード感を持って言い切っています。過熱と不安が交錯するリアルな今の空気が生々しく切り取られています。"
+            },
+            {
+                phrase: ["家の中", "LINEが繋ぐ", "反抗期"],
+                author: "純子",
+                interpretation: "反抗期を迎えた子供は家で一切口を聞いてくれない。それにもかかわらず、同じ屋根の下に暮らしながらスマートフォンアプリの「LINE」を通じてだけはかろうじて連絡が取れている、現代の親子関係です。",
+                evaluation: "同じ空間にいながらテキストで対話するという、現代のテクノロジーが生んだ親子の一コマを絶妙に風刺。断絶しそうな関係をLINEが「繋いでくれている」という、寂しさと安堵が交錯する深い共感を呼ぶ作品です。"
+            }
+        ];
+
+        // 初期構築
+        const grid = document.getElementById('senryuGrid');
+
+        senryuData.forEach((item, index) => {
+            const card = document.createElement('div');
+            // 上下のパディングは少なめ、行間を詰めた設計
+            card.className = `
+                bg-white rounded-lg shadow-sm hover:shadow-lg hover:-translate-y-1 
+                transition-all duration-300 relative overflow-hidden flex flex-col justify-between 
+                cursor-pointer border border-gray-100/80 min-h-[135px] py-3.5 px-4
+            `;
+            card.setAttribute('onclick', `openModal(${index})`);
+
+            // アクセント用の上部細いグラデーションライン
+            const accentLine = document.createElement('div');
+            accentLine.className = 'absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-600';
+            card.appendChild(accentLine);
+
+            // コンテンツラッパー
+            const content = document.createElement('div');
+            content.className = 'flex flex-col justify-between h-full flex-grow pt-1';
+
+            // 川柳（五七五の改行、行間を極限まで詰め、文字通り横書きで表示）
+            const phraseContainer = document.createElement('div');
+            phraseContainer.className = 'text-center my-auto flex flex-col justify-center space-y-0.5';
+            
+            item.phrase.forEach(part => {
+                const p = document.createElement('p');
+                p.className = 'text-sm md:text-[15px] font-bold text-gray-800 leading-tight tracking-wider';
+                p.textContent = part;
+                phraseContainer.appendChild(p);
+            });
+
+            // 詠み人（句の後に記述）
+            const authorContainer = document.createElement('div');
+            authorContainer.className = 'text-right text-[11px] text-indigo-600 font-medium mt-2 tracking-wide';
+            authorContainer.textContent = `― ${item.author}`;
+
+            content.appendChild(phraseContainer);
+            content.appendChild(authorContainer);
+            card.appendChild(content);
+            grid.appendChild(card);
+        });
+
+        // モーダル処理
+        function openModal(index) {
+            const item = senryuData[index];
+            const modal = document.getElementById('modal');
+            const modalPhrase = document.getElementById('modalPhrase');
+            const modalAuthor = document.getElementById('modalAuthor');
+            const modalInterpretation = document.getElementById('modalInterpretation');
+            const modalEvaluation = document.getElementById('modalEvaluation');
+
+            // 句のセット
+            modalPhrase.innerHTML = '';
+            item.phrase.forEach(part => {
+                const p = document.createElement('p');
+                p.className = 'font-black text-gray-900 leading-none tracking-widest py-0.5';
+                p.textContent = part;
+                modalPhrase.appendChild(p);
+            });
+
+            // 詠み人のセット
+            modalAuthor.textContent = `詠み人：${item.author}`;
+
+            // 解釈・評価のセット
+            modalInterpretation.textContent = item.interpretation;
+            modalEvaluation.textContent = item.evaluation;
+
+            // アニメーション表示
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('opacity-0');
+            modal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
