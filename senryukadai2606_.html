@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>課題吟（紫陽花）川柳句会評価</title>
+    <!-- Noto Sans JP (Gothic) and Noto Serif JP (Mincho) for elegant Japanese typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                        serif: ['"Noto Serif JP"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth transitions for high-quality interactions */
+        .card-shadow {
+            box-shadow: 0 4px 20px -2px rgba(139, 92, 246, 0.05), 0 2px 10px -1px rgba(139, 92, 246, 0.03);
+        }
+        .card-shadow:hover {
+            box-shadow: 0 12px 30px -4px rgba(109, 40, 217, 0.15), 0 4px 15px -2px rgba(109, 40, 217, 0.08);
+        }
+        /* Custom scrollbar for traditional Japanese paper style */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f3ff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c084fc;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #818cf8;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 font-sans text-stone-800 min-h-screen selection:bg-purple-200">
+
+    <!-- Elegant headers reflecting the rainy season aesthetic -->
+    <header class="relative bg-white border-b border-stone-200 py-8 px-4 overflow-hidden">
+        <!-- Abstract gradient background representing rain and hydrangeas -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none">
+            <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-purple-500 blur-3xl"></div>
+            <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-blue-500 blur-3xl"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 text-xs font-semibold rounded-full tracking-widest mb-3">句会講評録</span>
+            <h1 class="text-3xl md:text-4xl font-serif font-black text-stone-900 tracking-wider mb-2">
+                課題吟「紫陽花（アジサイ）」
+            </h1>
+            <p class="text-xs md:text-sm text-stone-500 max-w-xl mx-auto font-medium leading-relaxed">
+                雨に濡れて変幻自在に咲き誇る紫陽花。句会で詠まれた瑞々しい作品を、上鈴木先生の深く温かい講評・推敲ポイントとともに紐解きます。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        
+        <div class="flex justify-between items-center mb-4 border-b border-stone-200 pb-2">
+            <h3 class="text-sm font-bold text-stone-700 uppercase tracking-widest flex items-center">
+                <span>出吟作品 一覧 (12句)</span>
+            </h3>
+            <span class="text-xs text-stone-500">※カードをクリックすると解釈・句会講評が開きます</span>
+        </div>
+
+        <!-- Compact layouts requested by user: less spacing, tight margins -->
+        <div id="senryu-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            <!-- Dynamic Injection of Card Elements via Javascript -->
+        </div>
+
+    </main>
+
+    <!-- Modal backdrop with smooth fading animations -->
+    <div id="senryu-modal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <!-- Modal content window -->
+        <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden border border-stone-200 max-h-[90vh] flex flex-col scale-95 transition-transform duration-300">
+            <!-- Modal Accent line representing hydrangea colors -->
+            <div class="h-2 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-700"></div>
+            
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-6 md:p-8 overflow-y-auto flex-1">
+                <!-- Close Button -->
+                <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 transition-colors" aria-label="閉じる">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+
+                <!-- Poem Display Inside Modal -->
+                <div class="text-center mb-8 border-b border-stone-100 pb-6 relative">
+                    <span class="text-xs text-purple-600 font-bold tracking-widest uppercase mb-2 inline-block">出吟川柳</span>
+                    <h4 id="modal-phrase" class="text-2xl md:text-3xl font-serif font-black text-stone-900 tracking-wider leading-snug my-2">
+                        <!-- Dynamic content -->
+                    </h4>
+                    <p id="modal-author" class="text-sm font-medium text-stone-600 mt-2 font-serif">
+                        <!-- Dynamic content -->
+                    </p>
+                </div>
+
+                <!-- Interpretation and Evaluation Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Column 1: Interpretation -->
+                    <div class="space-y-2 bg-stone-50 p-4 rounded-lg border border-stone-100">
+                        <h5 class="text-sm font-bold text-stone-800 border-b border-stone-200 pb-1.5 flex items-center">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full mr-1.5"></span>
+                            句の解釈（情景）
+                        </h5>
+                        <p id="modal-interpretation" class="text-xs text-stone-600 leading-relaxed text-justify font-sans">
+                            <!-- Dynamic content -->
+                        </p>
+                    </div>
+
+                    <!-- Column 2: Evaluation & assembly comments -->
+                    <div class="space-y-2 bg-purple-50/50 p-4 rounded-lg border border-purple-100">
+                        <h5 class="text-sm font-bold text-purple-900 border-b border-purple-100 pb-1.5 flex items-center">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-1.5"></span>
+                            評価のポイント・推敲案
+                        </h5>
+                        <p id="modal-evaluation" class="text-xs text-purple-950 leading-relaxed text-justify font-sans">
+                            <!-- Dynamic content -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-stone-50 px-6 py-3 border-t border-stone-100 flex justify-end">
+                <button onclick="closeModal()" class="px-4 py-1.5 bg-stone-950 hover:bg-stone-800 text-white text-xs font-semibold rounded transition-colors shadow">
+                    閉じる
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Complete collection of Senryu data directly extracted and interpreted from image_86a4e1.png and its transcripts.
+        const senryuData = [
+            {
+                id: 1,
+                phrase: "梅雨が晴れ<br>路地のアジサイ<br>踊りだす",
+                author: "邦さん",
+                interpretation: "梅雨の晴れ間に、路地裏に佇むアジサイたちが太陽の光を浴びて、まるで嬉しそうに踊り出しているかのような躍動的な情景を描いています。アジサイと言えば本来は雨のイメージが強い中、あえて「晴れ」を選んだ点にみずみずしい生命力がみなぎっています。",
+                evaluation: "アジサイの生命感を「踊りだす」という擬人化で表現しているのが鮮やかです。句会での先生の講評に基づき、よりすっきりと詩的に仕上げるなら、説明的な「梅雨が晴れ」を「梅雨晴れに」とし、「梅雨晴れに 路地のアジサイ 踊りだす」と推敲すると、さらにリズム良く洗練された印象になります。"
+            },
+            {
+                id: 2,
+                phrase: "庭じまい<br>紫陽花だけは<br>とっておく",
+                author: "春栄",
+                interpretation: "生活の節目や、手入れのための庭の整理（庭じまい）を行う中で、他の植物は処分しても、アジサイだけは強い愛着を持って庭に残しておくという、アジサイへの深い思い入れと庭じまいの寂しさを描いた味わい深い句です。",
+                evaluation: "「庭じまい」という具体的で哀愁ある設定が、残されたアジサイの存在感を際立たせています。アジサイが手のかからない強健な植物であることを背景にしつつ、先生の遊び心ある講評のように、アジサイ目線から「庭じまい 紫陽花だけは 命乞い」と大胆に擬人化してドラマチックに仕立てたり、「紫陽花だけは 手間いらず」として余韻を残すのも魅力的な表現です。"
+            },
+            {
+                id: 3,
+                phrase: "菖蒲園<br>土手の紫陽花<br>競い咲く",
+                author: "かみこ",
+                interpretation: "菖蒲（しょうぶ）の花が主役である菖蒲園において、その周辺の土手に咲き誇るアジサイたちも負けじと美しさを競い合うように咲いている、非常に華やかで色彩豊かな梅雨の風景を活写しています。",
+                evaluation: "菖蒲に負けないアジサイの生命力を「競い咲く」と表現したことで、画面全体に美しい動きが出ています。板書の漢字表記（菖の草冠の書き方）への丁寧な指摘もふまえ、先生の推敲案「アジサイも 競い咲いてる 菖蒲園」とすることで、アジサイの場所を限定せず、読者に自由で広い絵を描かせる素晴らしい余白が生まれます。"
+            },
+            {
+                id: 4,
+                phrase: "鎌倉の<br>紫陽花寺で<br>飲む抹茶",
+                author: "ひろみつ",
+                interpretation: "アジサイの名所として名高い鎌倉のお寺（明月院など）を訪れ、満開の紫陽花に包まれながら、静かに一服の抹茶を嗜むという、非常に優雅で日本の美意識が凝縮された贅沢なひとときを詠んでいます。",
+                evaluation: "「鎌倉」「紫陽花寺」「抹茶」という情緒ある名詞が美しく調和し、読者に静寂と和の香りを想起させます。句会でも議論されたように、元句の「鎌倉の」という繋ぎ方は非常に自然で、場所の情緒をダイレクトに引き立てており、安定感のある優れた構成になっています。"
+            },
+            {
+                id: 5,
+                phrase: "七変化<br>庭にオープン<br>菓子ビュッフェ",
+                author: "まさかず",
+                interpretation: "アジサイが色とりどりに変化しながら咲く様子を、お庭に新しくオープンした「お菓子（和菓子）のビュッフェ」に見立てた、非常にモダンで遊び心に満ちたユーモラスな句です。",
+                evaluation: "アジサイの色彩変化をビュッフェに例える豊かな想像力が素晴らしく、句会を大いに盛り上げました。雨上がりにパッと色鮮やかに現れた様子を「新規オープン」と捉えた意図が伝わります。さらに和の情緒を加えるなら「七変化 庭に開いた 和三盆」のように推敲するのも、繊細な美しさが表現されて面白い試みです。"
+            },
+            {
+                id: 6,
+                phrase: "紫陽花が<br>夜露にぬれて<br>大はしゃぎ",
+                author: "びいき",
+                interpretation: "夜露をたっぷりと浴びて生き生きと輝くアジサイの姿を、まるで夜の間に静かに「大はしゃぎ」して楽しんでいるかのように、愛らしく擬人化した瑞々しい句です。",
+                evaluation: "本来は静かに濡れているアジサイを「大はしゃぎ」と表現した逆転の発想が、非常に新鮮で愛嬌に満ちています。読者の心を明るくするような、前向きで可愛らしいアジサイの新しい一面を引き出した点が高く評価されます。"
+            },
+            {
+                id: 7,
+                phrase: "サミットに<br>早苗紫陽花<br>輝けり",
+                author: "斎木",
+                interpretation: "世界的な重要会議である「サミット」の開催時期を背景に、青々と伸びる早苗と、瑞々しく輝くアジサイの競演を描き、国家の未来や輝きをも象徴するような格調高い風景を詠んでいます。",
+                evaluation: "サミットという社会性の強い言葉に、伝統的な季節の景物である「早苗」「紫陽花」を組み合わせることで、現代的かつスケールの大きな世界観を演出しています。先生のユニークな解釈のように、相手や状況に合わせて変化するアジサイ（七変化）に「サミット（多国間外交）」の絶妙な掛け合いを重ね合わせて読むと、風刺と知性がより一層際立ちます。"
+            },
+            {
+                id: 8,
+                phrase: "カタツムリ<br>紫陽花咲いて<br>雨宿り",
+                author: "さち",
+                interpretation: "梅雨の主役であるカタツムリが、大輪のアジサイの花や大きな葉っぱの下で、優しく降る雨を避けて静かに雨宿りをしている、絵本の一場面のような温かく愛らしい情景を描いています。",
+                evaluation: "アジサイとカタツムリという王道の組み合わせを、素直かつ愛らしく一枚の絵にまとめています。アジサイの葉の毒を避けて、ただ静かに雨を凌いでいるカタツムリの習性をも想起させつつ、梅雨時ならではのしっとりとした時間の流れを優しく表現した癒やしの一句です。"
+            },
+            {
+                id: 9,
+                phrase: "紫陽花の<br>雨に打たれて<br>凛とする",
+                author: "しず",
+                interpretation: "激しい梅雨の雨に打たれながらも、うつむいたり崩れたりすることなく、背筋を伸ばして凛々しく佇むアジサイの気高い美しさを、静かな感動とともに捉えています。",
+                evaluation: "雨に濡れるアジサイの強さと高潔さを「凛とする」と表現したことで、アジサイの美しさだけでなく、詠み手自身の生き方や姿勢をも投影しているかのような深い精神性を感じさせます。先生の講評通り、下句を言い切る形が非常に力強く、雨の重みに負けない美しい芯の強さを際立たせています。"
+            },
+            {
+                id: 10,
+                phrase: "窓ぎわの<br>あじさいの青<br>きわだって",
+                author: "葉月",
+                interpretation: "雨で煙る外の景色を部屋の窓から見つめたとき、窓辺に咲くアジサイの鮮やかな青色が、水分を含んでより一層鮮烈に目に飛び込んできた瞬間の感動を瑞々しく切り取っています。",
+                evaluation: "「青きわだって」という視覚的なコントラストが素晴らしく、梅雨の薄暗い空気の中でアジサイの青だけが発光するように美しく際立つ様子が眼前に浮かびます。先生の推敲案のように、アジサイそのものの鮮やかさにフォーカスを当て、窓外のしっとりとした情緒をアジサイの「青」一点に凝縮させて見せた表現技術が光ります。"
+            },
+            {
+                id: 11,
+                phrase: "紫陽花と<br>妻の小言は<br>七変化",
+                author: "ちゑ",
+                interpretation: "見る時々によって目まぐるしくその色彩を変えていくアジサイ（七変化）と、その日その時でコロコロと内容や機嫌が変わる妻の尽きない小言を、ユーモアを交えて微笑ましく重ね合わせた傑作です。",
+                evaluation: "梅雨の季節感を取り入れながら、夫婦の日常のリアルなやり取りを「七変化」という共通点で結びつけたユーモアセンスが絶品です。先生や句会での盛り上がりにもあったように、アジサイの多面的な魅力と、愛嬌のある妻の気まぐれさを重ねることで、どこか温かく愛情に満ちた家庭風景が浮かび上がる名句です。"
+            },
+            {
+                id: 12,
+                phrase: "紫陽花は<br>移り気さえも<br>愛でられる",
+                author: "純子",
+                interpretation: "アジサイの花言葉でもある「移り気」という、人間関係においてはマイナスに捉えられがちな言葉を、アジサイの美しい色の変化を愛でる人々の温かい目線を通して、肯定的に包み込んだ深みのある句です。",
+                evaluation: "色の変化という移ろいやすさを、単なるマイナスではなく「愛でるべき美しさ」に昇華させた、人間への深い包容力と愛に溢れた視点が素晴らしく、多くの共感を呼びました。先生の講評にあるように、人情の機微や移ろいやすい人間の心さえも、アジサイの持つ変幻自在な美しさと同様に愛おしく許容するような、大きな優しさが感じられます。"
+            }
+        ];
+
+        // This script dynamically populates the tight grid with elegant cards.
+        function renderCards() {
+            const grid = document.getElementById('senryu-grid');
+            grid.innerHTML = '';
+
+            senryuData.forEach(item => {
+                const card = document.createElement('div');
+                // Designing cards with close spaces, narrow padding, and hover actions as requested
+                card.className = "relative bg-white rounded-lg border border-stone-200 py-3 px-4 card-shadow cursor-pointer hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full";
+                card.setAttribute('onclick', `openModal(${item.id})`);
+
+                card.innerHTML = `
+                    <!-- Gradient accent top bar (Purple to Indigo) -->
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-700 rounded-t-lg"></div>
+                    
+                    <!-- Senryu Text Area with Tight leading -->
+                    <div class="mt-1 flex-grow flex flex-col justify-center">
+                        <p class="font-serif font-bold text-stone-950 text-base leading-snug tracking-wider text-center">
+                            ${item.phrase}
+                        </p>
+                    </div>
+                    
+                    <!-- Author Text with small margins -->
+                    <div class="mt-2 text-center border-t border-stone-100 pt-1.5">
+                        <p class="text-xs text-stone-500 font-serif font-medium">
+                            ${item.author}
+                        </p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Controls smooth pop-up and close animations for dynamic detailed reading.
+        function openModal(id) {
+            const item = senryuData.find(d => d.id === id);
+            if (!item) return;
+
+            document.getElementById('modal-phrase').innerHTML = item.phrase;
+            document.getElementById('modal-author').innerText = `詠み人：${item.author}`;
+            document.getElementById('modal-interpretation').innerText = item.interpretation;
+            document.getElementById('modal-evaluation').innerText = item.evaluation;
+
+            const modal = document.getElementById('senryu-modal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+            modal.querySelector('.bg-white').classList.remove('scale-95');
+            modal.querySelector('.bg-white').classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('senryu-modal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-white').classList.remove('scale-100');
+            modal.querySelector('.bg-white').classList.add('scale-95');
+        }
+
+        // Close modal when clicking outside content area
+        document.getElementById('senryu-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initialize cards on page load
+        window.onload = function() {
+            renderCards();
+        }
+    </script>
+</body>
+</html>
