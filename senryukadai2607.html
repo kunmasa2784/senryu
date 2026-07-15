@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>川柳句会：講師講評</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Noto Sans JP Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #f4f2f7; /* 上品で微かに紫がかった和モダンな極薄グレー */
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #c7b9db;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #a38fc2;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-gray-800 antialiased flex flex-col">
+
+  <!-- ヘッダー領域（美しい青と紫のグラデーションカバー） -->
+  <header class="w-full max-w-7xl mx-auto px-4 md:px-6 mt-6 mb-4">
+    <div class="relative overflow-hidden rounded-xl shadow-lg border border-indigo-950/30 bg-gradient-to-r from-[#0d0926] via-[#1b0f44] to-[#450a5f] py-6 sm:py-10 px-4 flex flex-col items-center justify-center text-center">
+      <!-- 背景テクスチャとして元のグラデーション画像を美しくブレンド -->
+      <img 
+        src="image_4c0ba8.png" 
+        alt="" 
+        class="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none mix-blend-overlay"
+        onerror="this.style.display='none';"
+      >
+      <!-- カバー内のテキストコンテンツ（どの解像度でも美しくクッキリと読めるレスポンシブテキスト） -->
+      <span class="relative z-10 text-[10px] sm:text-xs font-semibold tracking-widest text-purple-200 border border-purple-400/40 px-3.5 py-1 rounded-full mb-2 sm:mb-3 bg-purple-950/60 shadow-sm backdrop-blur-sm">
+        句会決定版
+      </span>
+      <h1 class="relative z-10 text-xl sm:text-3xl md:text-4xl font-black tracking-widest text-white leading-tight drop-shadow-md">
+        川柳句会：講師講評
+      </h1>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main class="flex-grow w-full max-w-7xl mx-auto px-4 md:px-6 mb-12">
+    <!-- 横4列のグリッドレイアウト（レスポンシブ対応） -->
+    <div id="senryu-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+      <!-- JavaScriptによりカードが動的に挿入されます -->
+    </div>
+  </main>
+
+  <!-- モーダルウィンドウ（ポップアップ） -->
+  <div id="senryu-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+      
+      <!-- モーダル上部の装飾線（紫から藍色へのグラデーション） -->
+      <div class="h-2 bg-gradient-to-r from-purple-600 via-indigo-700 to-blue-900 w-full"></div>
+      
+      <!-- モーダルヘッダー -->
+      <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-purple-50/30">
+        <span class="text-xs font-semibold tracking-wider text-purple-700 bg-purple-100/70 px-2.5 py-1 rounded-full">合評・講師アドバイス詳細</span>
+        <button id="close-modal-btn" class="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none p-1 rounded-full hover:bg-gray-100">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- モーダルコンテンツ（スクロール可能） -->
+      <div class="px-6 py-6 overflow-y-auto custom-scrollbar space-y-6 flex-grow">
+        <!-- 句のダイナミック表示 -->
+        <div class="text-center py-4 bg-gradient-to-tr from-purple-50/50 to-indigo-50/50 rounded-lg border border-purple-100/50">
+          <div id="modal-phrase" class="text-xl md:text-2xl font-bold tracking-widest text-indigo-950 leading-snug space-y-1">
+            <!-- 動的挿入 -->
+          </div>
+          <p id="modal-author" class="text-sm text-purple-700 font-medium mt-3">
+            <!-- 動的挿入 -->
+          </p>
+        </div>
+
+        <!-- 解釈 ＆ 評価のポイントのバランス配置 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+          <!-- 解釈ブロック -->
+          <div class="bg-amber-50/30 border border-amber-100/50 p-4 rounded-lg space-y-2">
+            <h3 class="text-sm font-bold text-amber-800 flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              講師による解説・合評
+            </h3>
+            <p id="modal-interpretation" class="text-sm leading-relaxed text-gray-700 whitespace-pre-line">
+              <!-- 動的挿入 -->
+            </p>
+          </div>
+
+          <!-- 評価のポイントブロック -->
+          <div class="bg-indigo-50/30 border border-indigo-100/50 p-4 rounded-lg space-y-2">
+            <h3 class="text-sm font-bold text-indigo-800 flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              合評会アドバイスと評価
+            </h3>
+            <p id="modal-points" class="text-sm leading-relaxed text-gray-700 whitespace-pre-line">
+              <!-- 動的挿入 -->
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- モーダルフッター -->
+      <div class="px-6 py-3 border-t border-gray-100 bg-gray-50 flex justify-end">
+        <button id="close-modal-bottom-btn" class="bg-purple-700 hover:bg-purple-800 text-white font-medium text-sm py-2 px-5 rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
+          閉じる
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // 川柳データベース（画像 image_4b0c5f.png & 音声ファイル 川柳071.m4a の講師指導内容に準拠）
+    const senryuDatabase = [
+      {
+        id: 1,
+        phrase: ["愛いらぬ", "三感と運", "あればいい"],
+        author: "斎木",
+        interpretation: "合評会の冒頭、講師が「ごめんなさい、この三感ってわからないんです」と問いかけ、全員で話し合うプロセスが印象的な一句です。\n五感（目、耳、鼻、口、皮膚）から引き算し、「見る（視覚）」「聞く（聴覚）」「味わう（味覚）」という、高齢期に特に衰えを感じやすい3つの基本感覚を独自に「三感」と定義。愛よりも、その健全な感覚と少しの「運」さえ味方してくれれば十分に生きていけるという、現実的でどこか謙虚な悟りを表現しています。",
+        points: "講師が「なるほど！見る・聞く・食べるの3つに、運があればいいということね」と納得したように、衰えゆく身体の真実を「三感」という言葉で包み込んだ点が非常に独創的です。愛という美辞麗句を排し、運と健やかさだけを願う高齢期のリアルな本音をユーモラスに描き出しています。"
+      },
+      {
+        id: 2,
+        phrase: ["今もなお", "祖母の微笑み", "道しるべ"],
+        author: "純子",
+        interpretation: "すでに他界している祖母（おばあちゃん）の思い出を詠んだ温かい作品です。\n祖母亡き後、今はお母さんが同じように年齢を重ねている（あるいは介護が必要な）状態であり、人生の岐路や迷いそうな時に、かつて心に焼き付いた「祖母の優しい微笑み」が、確かな進むべき方向（道しるべ）になっているという、深い家族の繋がりを描いています。",
+        points: "合評では「どう考えてもおばあちゃんが道しるべになっている様子が伝わる」と賛同されました。「祖母の微笑み」という具体的な記憶の映像が、遺された人の心の中で尊い灯火（みちしるべ）として永遠に機能している様子が美しくまとめられています。"
+      },
+      {
+        id: 3,
+        phrase: ["手を繋ぐ", "チャーミーグリーン", "今介護"],
+        author: "まさかず",
+        interpretation: "昭和〜平成の有名CMで、仲良くスキップして手を繋ぎ歩く老夫婦が印象的だった食器用洗剤「チャーミーグリーン」。\n若い頃はロマンスの意味を込めてあのCMのように手を繋いでいた夫婦が、長い年月を経て、今では転倒防止や支え合いとしての「介護の手繋ぎ」になっているという、長い夫婦の歴史と愛情を切り取った一句です。",
+        points: "合評で講師も「この年代は全員わかる商品名（笑）」と笑顔に。また、「チャーミー（4音）グリーン（4音）今介護（6音）」の合計14音が字余り（8音）となっている点に関しても、「これは商品名だから削りようがない、このままで良い」と評価されました。同じ「手を繋ぐ」行為の、ロマンスから介護への意味の変化が、哀愁とユーモアを持って鮮やかに表現されています。"
+      },
+      {
+        id: 4,
+        phrase: ["愛そそぎ", "育てたはずが", "そっぽむき"],
+        author: "かみこ",
+        interpretation: "親としてはたっぷりと愛情を注いで一所懸命に育てた「つもり」であった我が子。\nしかし、成長した子供は親の思うようにはいかず、自分の世界を作ったり反抗したりしてそっぽを向いてしまう。親の報われない切なさと寂しさを、どこかからっとした川柳のトーンで吐露しています。",
+        points: "合評会では、「育てたつもり」ではなく「育てたはずが」という表現に添削された点が議論されました。\n講師は「『つもり』と直接言うよりも、『育てたはずが』と言い換えることによって、親としての自嘲の念や『〜のはずだったのに』という客観的で切ないニュアンスがより一層滲み出る」と高く評価しました。"
+      },
+      {
+        id: 5,
+        phrase: ["愛しい子", "ママの眼差し", "マドンナだ"],
+        author: "びいき",
+        interpretation: "大好きな母親の胸に抱かれ、優しく見つめられている愛しい我が子。お母さんが我が子に向けるその温かい「眼差し」は、子供にとって崇高な聖母マリア（マドンナ）のようであり、またお母さんにとっても我が子は特別な存在である、という二者間の無条件の愛を表現しています。",
+        points: "合評会にて、講師より「まなざし（眼差し）の漢字が、睡眠の『眠』になっている！」という鋭い指摘があり、漢字の間違い（眼差しは眼球、目であるべき）が正されました。\nまた講師は「『ママ』という言葉自体が子供との関係を物語っているので非常にすっきりとしており、愛に満ちた眼差しの美しさがストレートに伝わってくる」と解説しました。"
+      },
+      {
+        id: 6,
+        phrase: ["愛のムチ", "昔ほめられ", "今は罪"],
+        author: "邦さん",
+        interpretation: "かつては教育や人間関係において、厳しくも相手を思って行う「愛のムチ」は、熱心さの表れとして周囲から褒められ、許容されていました。しかしハラスメントへの配慮が厳しい現代社会においては、それが「罪（体罰や暴力）」と断定されてしまう、価値観の劇的なギャップを切り取っています。",
+        points: "合評会では「人間関係が本当に難しくなってきた今の時代」をリアルに象徴する句として共感を呼びました。良かれと思って行っていた昭和〜平成の指導法が、現代では通用しないという時代の戸惑いを、「昔ほめられ 今は罪」という極めて簡潔な対比で風奏した表現力が秀逸です。"
+      },
+      {
+        id: 7,
+        phrase: ["愛の河", "渡りそこねた", "ままひとり"],
+        author: "ちゑ",
+        interpretation: "結婚や、誰かと深く愛し合って共に添い遂げる人生を「愛の河」に例えた作品です。人生のどこかの段階で、その愛の河を渡りそこねてしまい、結果として今も独身のまま、ひとりで暮らしているという人生の軌跡を静かに振り返っています。",
+        points: "合評会にて講師は、「『渡りそこねて』と繋げるよりも、あえて『渡りそこねたままひとり』と言い切ることで、ひとり暮らしの現在の境遇（寂しさや、あるいは一人の気楽さ）という『人生の深い余韻』が、読者の心により一層強く残る」と解説・評価しました。"
+      },
+      {
+        id: 8,
+        phrase: ["愛があり", "お金もあれば", "もっといい"],
+        author: "しず",
+        interpretation: "お互いを思いやる純粋な「愛」があることは何よりも大切だが、同時に生活を安定して支える「お金」も手元にあれば、さらに人生は素晴らしいものになるという、誰もが心の中に抱く正直で健全な欲望をさらりと詠んだ句です。",
+        points: "合評会は大いに盛り上がり、講師や参加者が「お金もあって、愛もあって、でもこの年代になると結局は『健康』が一番大事ですね！」と笑い合いました。本音を包み隠さず軽快に歌い上げる川柳の良さが発揮されており、合評を通して健康の大切さにまで思考が広がる含蓄を持っています。"
+      },
+      {
+        id: 9,
+        phrase: ["初恋の", "人の写真は", "セピア色"],
+        author: "ひろみつ",
+        interpretation: "遥か昔に抱いた、淡く純粋だった初恋の思い出。その相手の写真を今でも手元に残しており、取り出してみれば年月を物語るようにセピア色に色褪せている、というノスタルジー漂う情景です。",
+        points: "合評会で講師は、「単に写真がセピア色であるという描写に留まらず、その初恋の相手の写真を『ずっと捨てられずに持っている、残している』という作者の心の未練や愛おしさこそが、この句の裏の大きなポイントである」と指摘しました。講師から「初恋の人の写真は捨てられず」と下五を変更する添削案も提示され、さらに心情が強調される学びがありました。"
+      },
+      {
+        id: 10,
+        phrase: ["愛らしき", "ママに抱かれて", "ねむる吾子"],
+        author: "葉月",
+        interpretation: "大好きな母親の腕に抱かれ、安心しきって眠りに落ちている我が子（吾子）。お母さんの温もりに包まれてすやすやと眠るその赤ちゃんの寝顔は、この上なく愛らしく、見つめるお母さんの心を満たしています。",
+        points: "合評では「『愛らしい』という形容詞はママにかかるのではなく、眠る吾子にかかっているのだ」という視線（関係性）の整理が行われました。講師は、「愛らしきママに…」と修飾関係を正しく整えるか、あるいは第三者の視点として「愛らしい ママに抱かれて 眠る赤子」のように表現することで、親子の間に流れる極上の無条件の愛情空間がより美しく際立つと解説しました。"
+      },
+      {
+        id: 11,
+        phrase: ["愛はある", "家なしカーなし", "ババア付き"],
+        author: "春栄",
+        interpretation: "かつて流行したプロポーズの条件「家なし、車なし、でも愛はある」。しかし現実の結婚生活には、なんと「お姑さん（ババア）の同居」という賑やかで過酷（？）な条件がセットで付いてくる、という強烈な現実主義を詠んだ大爆笑の一句です。",
+        points: "合評会では、「ババア側（お姑さん）も若いお嫁さんとの同居は嫌かもしれないが、お嫁さん側も同居は大変。でもその気まずい現実を明るく豪快に笑い飛ばしている」と語り合われました。理想の言葉の裏にある「ババア付き」というパンチの効いたオチが、川柳ならではのたくましい庶民の生命力を象徴しています。"
+      },
+      {
+        id: 12,
+        phrase: ["「愛してる」", "心にぽっと", "火が灯る"],
+        author: "啓子",
+        interpretation: "「愛してる」という、誰かから言われた（あるいは伝えた）温かい一言が、冷えて暗かった自分の心の中に、温かく灯る小さな炎（火）を灯してくれた、という言葉の持つ救済力を表現しています。",
+        points: "合評会で講師より「『心にぽっと火が灯る』という表現は、少し説明的で饒舌（じょうぜつ）に流れてしまっている」という鋭い指摘がありました。\nそして、「『愛してる 一言だけで 心に火』と下五をシンプルに削ぎ落とすことで、余計な説明がなくなり、言葉そのものが持つ劇的な効果や暖かさがより際立つ」という素晴らしいアドバイスが提示されました。"
+      }
+    ];
+
+    // DOMの生成とイベントのセットアップ
+    document.addEventListener("DOMContentLoaded", () => {
+      const grid = document.getElementById("senryu-grid");
+      const modal = document.getElementById("senryu-modal");
+      const modalContent = modal.querySelector(".bg-white");
+
+      const modalPhrase = document.getElementById("modal-phrase");
+      const modalAuthor = document.getElementById("modal-author");
+      const modalInterpretation = document.getElementById("modal-interpretation");
+      const modalPoints = document.getElementById("modal-points");
+
+      const closeModalBtn = document.getElementById("close-modal-btn");
+      const closeModalBottomBtn = document.getElementById("close-modal-bottom-btn");
+
+      // カードを生成して挿入
+      senryuDatabase.forEach(data => {
+        const card = document.createElement("div");
+        card.className = `
+          relative bg-white rounded-lg shadow-sm hover:shadow-md 
+          transform hover:-translate-y-1 transition-all duration-300 ease-out 
+          cursor-pointer flex flex-col justify-between overflow-hidden 
+          border border-purple-100/60 p-3 pt-4 pb-3
+        `;
+
+        // 各カード上部に紫から藍色へのグラデーションカラーの細い線を入れる
+        const gradientLine = document.createElement("div");
+        gradientLine.className = "absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-purple-500 via-indigo-600 to-blue-800";
+        card.appendChild(gradientLine);
+
+        // 川柳句（五七五の改行）と詠み人の横書き配置
+        const textContainer = document.createElement("div");
+        textContainer.className = "flex flex-col justify-between h-full space-y-2";
+
+        // 句の部分（行間をしっかり詰める leading-tight）
+        const phraseContainer = document.createElement("div");
+        phraseContainer.className = "text-center text-[15px] font-bold text-slate-800 leading-tight tracking-wider space-y-0.5 py-1";
+        data.phrase.forEach(line => {
+          const p = document.createElement("p");
+          p.textContent = line;
+          phraseContainer.appendChild(p);
+        });
+
+        // 詠み人（句の後に記述）
+        const authorPara = document.createElement("p");
+        authorPara.className = "text-right text-xs text-purple-600 font-medium tracking-wide mt-1.5 pr-1";
+        authorPara.innerHTML = `<span class="text-purple-300 mr-1">―</span> ${data.author}`;
+
+        textContainer.appendChild(phraseContainer);
+        textContainer.appendChild(authorPara);
+        card.appendChild(textContainer);
+
+        // カードクリック時のモーダルオープンイベント
+        card.addEventListener("click", () => {
+          openModal(data);
+        });
+
+        grid.appendChild(card);
+      });
+
+      // モーダルを開く処理
+      function openModal(data) {
+        // 句の流し込み
+        modalPhrase.innerHTML = "";
+        data.phrase.forEach(line => {
+          const p = document.createElement("p");
+          p.textContent = line;
+          modalPhrase.appendChild(p);
+        });
+        
+        modalAuthor.innerHTML = `<span class="text-purple-400 mr-1.5">◆</span> 詠み人: ${data.author}`;
+        modalInterpretation.textContent = data.interpretation;
+        modalPoints.textContent = data.points;
+
+        // クラス操作でフェードイン & スケールアップ
+        modal.classList.remove("opacity-0", "pointer-events-none");
+        modalContent.classList.remove("scale-95");
+        modalContent.classList.add("scale-100");
+        document.body.classList.add("overflow-hidden"); // 背景スクロール禁止
+      }
+
+      // モーダルを閉じる処理
+      function closeModal() {
+        modal.classList.add("opacity-0", "pointer-events-none");
+        modalContent.classList.remove("scale-100");
+        modalContent.classList.add("scale-95");
+        document.body.classList.remove("overflow-hidden");
+      }
+
+      // 閉じるイベントアタッチ
+      closeModalBtn.addEventListener("click", closeModal);
+      closeModalBottomBtn.addEventListener("click", closeModal);
+
+      // モーダルの外側をクリックしたら閉じる
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // ESCキーでモーダルを閉じる
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeModal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
