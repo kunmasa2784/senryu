@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>川柳句会：講師講評を取り入れた推敲・修正一覧</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Noto Sans JP) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons for UI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        /* スムーズなフェードインアニメーション */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-16">
+
+    <!-- ヘッダー -->
+    <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-purple-950 text-white shadow-md relative overflow-hidden py-8 px-4 sm:px-6 lg:px-8 mb-8">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,0.15),transparent_45%)]"></div>
+        <div class="max-w-7xl mx-auto relative z-10 text-center">
+            <span class="inline-block bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">句会決定版</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">川柳句会：講師講評・推敲一覧</h1>
+            <p class="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-6 flex justify-between items-center border-b border-slate-200 pb-3">
+            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <span class="w-1 h-6 bg-gradient-to-b from-purple-600 to-indigo-600 rounded-full"></span>
+                川柳カード（全12句）
+            </h2>
+            <span class="text-xs text-slate-500">※カードをクリックすると講評を表示</span>
+        </div>
+
+        <!-- 4列のグリッドレイアウト (カードの上下空白極小・行間極小設計) -->
+        <div id="senryuGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- JavaScriptにより動的にカードが挿入されます -->
+        </div>
+
+        <!-- 句会での爆笑・感動エピソード解説（アコーディオン形式） -->
+        <section class="mt-12 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2 border-b border-slate-100 pb-3">
+                <i class="fa-solid text-purple-600 fa-comments"></i>
+                句会での爆笑・感動エピソード
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- エピソード1 -->
+                <div class="bg-purple-50/50 p-4 rounded-lg border border-purple-100/70">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-purple-600 text-white text-xs px-2 py-0.5 rounded font-bold">邦さん</span>
+                        <h4 class="font-bold text-slate-800">『職務歴我が家のゴミの担当者』</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        講師は当初、コミカルで具体的な「捨て係（玄関のゴミを持って行くだけ）」を提案しました。しかし邦さんご自身が「分別から袋まとめ、ゴミ出しまで、1から10まで全部一人でやっている！」と熱く主張。大納得の上、単なる係ではなく堂々の「担当者（管理職）」で満場一致の決定となりました！
+                    </p>
+                </div>
+
+                <!-- エピソード2 -->
+                <div class="bg-indigo-50/50 p-4 rounded-lg border border-indigo-100/70">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-indigo-600 text-white text-xs px-2 py-0.5 rounded font-bold">ちゑさん</span>
+                        <h4 class="font-bold text-slate-800">『赤い糸よじれてお兄さんと呼び』</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        元の「どこでよじれた今義兄」から、具体的な結末である「お兄さんと呼ぶことになってしまった」へ変更。かつて好きだった人が姉と結婚し義理の兄になったという、少し複雑で切ない関係性が「あかいいと(5) よじれておにい(7) さんとよび(5)」の美しい五七五に劇的に生まれ変わりました。
+                    </p>
+                </div>
+
+                <!-- エピソード3 -->
+                <div class="bg-sky-50/50 p-4 rounded-lg border border-sky-100/70">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-sky-600 text-white text-xs px-2 py-0.5 rounded font-bold">ひろみつさん</span>
+                        <h4 class="font-bold text-slate-800">『冷蔵庫の中で暮らせる冷が欲しい』</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        「日は近い」と書いてしまうと、SFの退廃的な世界や、ご遺体の安置など不穏なイメージを読者に与える恐れがありました。「冷（ひ）が欲しい」と言葉を整えることで、過酷な猛暑から逃れて冷蔵庫の涼しさを心底求める、万人が共感できるユーモアへと綺麗に昇華されました。
+                    </p>
+                </div>
+
+                <!-- エピソード4 -->
+                <div class="bg-emerald-50/50 p-4 rounded-lg border border-emerald-100/70">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-emerald-600 text-white text-xs px-2 py-0.5 rounded font-bold">春栄さん</span>
+                        <h4 class="font-bold text-slate-800">『米うなぎ食わず値下がり待つ夫』</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        「食わぬ作戦夫勝つ」では何の勝負か曖昧でしたが、実は「養殖成功による値下がりを辛抱強く待ち、ついに安くゲットした夫の辛抱強い勝利」という経緯がありました。「値下がり待つ夫」に整理したことで、節約を楽しんで辛抱強く安値を見届ける夫の愛らしい姿が浮かび上がります。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 詳細ポップアップ (Modal) -->
+    <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden transform scale-95 transition-transform duration-300 border-t-[6px] border-indigo-600 flex flex-col max-h-[90vh]">
+            <!-- モーダルヘッダー -->
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-start">
+                <div>
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">川柳講評・鑑賞</span>
+                    <h3 id="modalAuthor" class="text-sm text-slate-500 mt-0.5">詠み人：---</h3>
+                </div>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-full hover:bg-slate-100 focus:outline-none">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <!-- モーダルボディ（スクロール可能） -->
+            <div class="p-6 overflow-y-auto space-y-5">
+                <!-- 川柳の横書き表示 -->
+                <div class="bg-gradient-to-br from-indigo-50/75 to-purple-50/75 p-5 rounded-lg border border-indigo-100/50 text-center">
+                    <p id="modalPhrase" class="text-2xl font-black text-slate-900 leading-tight tracking-wider font-serif">
+                        <!-- 川柳テキスト -->
+                    </p>
+                    <p id="modalAuthorSub" class="text-sm text-slate-600 mt-2 font-medium">
+                        <!-- 詠み人 -->
+                    </p>
+                </div>
+
+                <!-- 対比表示（変更前がある場合） -->
+                <div id="modalCompareBox" class="bg-slate-50 p-3 rounded-lg border border-slate-200/60 text-xs text-slate-600">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="bg-slate-300 text-slate-700 text-[10px] px-1.5 py-0.5 rounded font-bold">元の句</span>
+                        <span id="modalOriginal" class="font-serif italic text-slate-500"></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="bg-emerald-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">修正案</span>
+                        <span id="modalProposed" class="font-serif font-semibold text-slate-800"></span>
+                    </div>
+                </div>
+
+                <!-- 解釈 -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-book-open text-purple-500"></i>句の解釈
+                    </h4>
+                    <p id="modalExplanation" class="text-sm text-slate-700 leading-relaxed bg-slate-50/50 p-3 rounded-md border border-slate-100">
+                        <!-- 解釈の文章 -->
+                    </p>
+                </div>
+
+                <!-- 評価のポイント -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-award text-amber-500"></i>推敲・評価のポイント
+                    </h4>
+                    <p id="modalPoints" class="text-sm text-slate-700 leading-relaxed bg-amber-50/30 p-3 rounded-md border border-amber-100/50">
+                        <!-- 評価の文章 -->
+                    </p>
+                </div>
+            </div>
+
+            <!-- モーダルフッター -->
+            <div class="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModal()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors shadow-sm">
+                    閉じる
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 川柳データの定義
+        const senryuData = [
+            {
+                id: 1,
+                original: "視力表上下左右は記憶力",
+                modified: "視力表上下左右は記憶力",
+                isModified: false,
+                phrase: ["視力表", "上下左右は", "記憶力"],
+                author: "斎木",
+                explanation: "視力検査を何度も受けているうちに、上下左右のランドルト環の向きのパターンを覚えてしまい、もはや視力ではなく純粋な『記憶力のテスト』のようになっているという、検査時のクスッと笑える日常の一コマです。",
+                points: "「視力検査」と表現すると5音から溢れて字余りになりますが、「視力表」という言葉に置き換えることで5音に美しく収め、かつ情景も完全に理解できるため、このままで非常に完成度の高い一句となっています。"
+            },
+            {
+                id: 2,
+                original: "根負けでクーラースイッチONにする",
+                modified: "根負けでクーラーONにさせられる",
+                isModified: true,
+                phrase: ["根負けで", "クーラーONに", "させられる"],
+                author: "かみこ",
+                explanation: "家の中の気温設定を巡る家族とのせめぎ合い。電気代や身体の冷えを気にして我慢していたものの、暑がる家族の猛攻に根負けし、結果的にクーラーをつける展開になってしまった敗北宣言です。",
+                points: "元の句にある「スイッチ」「にする」といった、説明的で音数を食う無駄な言葉を思い切ってカット。『させられる』という受動的な表現へ変更したことで、家族とのコミカルな力関係や不本意さが際立ち、川柳らしい可笑しみが増しました。"
+            },
+            {
+                id: 3,
+                original: "スポーツもキングごり押しレッドだぞ",
+                modified: "スポーツもキングごり押しレッドだぞ",
+                isModified: false,
+                phrase: ["スポーツも", "キングごり押し", "レッドだぞ"],
+                author: "びいき",
+                explanation: "トランプの『キング』や、サッカーの『レッドカード』といったカードゲーム・スポーツの概念を巧妙に比喩として交え、スポーツ界の利権構造や国際的な権力闘争、政情をチクリと鋭く風刺した奥行きのある一句です。",
+                points: "独自の尖ったワードセンスが光る一句。解説や比喩の含みが非常に個性的であり、読む人によって様々な風刺を想像させることができる味わい深さがあるため、改変せずにそのままの魅力が活かされています。"
+            },
+            {
+                id: 4,
+                original: "職務歴我が家のゴミの担当者",
+                modified: "職務歴我が家のゴミの担当者",
+                isModified: false,
+                phrase: ["職務歴", "我が家のゴミの", "担当者"],
+                author: "邦さん",
+                explanation: "定年退職などを経たお父さんの第二のキャリア。それは、毎日家庭から出るゴミの分別、徹底的な管理、収集、そして最後のゴミ出しまでを一手に行う『我が家のゴミ担当のプロフェッショナル』としての誇り高きお仕事です。",
+                points: "講師からはより具体的でコミカルな『捨て係』への変更が提案されましたが、邦さん自身が『家中のゴミ分別からすべて自分で行っている！』と反論。大納得の上、単なる『捨てに行く人（係）』ではなく、堂々の『担当者（管理職）』という言葉が勝ち残りました。"
+            },
+            {
+                id: 5,
+                original: "赤い糸どこでよじれた今義兄",
+                modified: "赤い糸よじれてお兄さんと呼び",
+                isModified: true,
+                phrase: ["赤い糸", "よじれてお兄", "さんと呼び"],
+                author: "ちゑ",
+                explanation: "かつて密かに恋心を抱き、『赤い糸』で結ばれるはずだった好意の対象。しかし、運命のいたずらか何かの間違いか、彼は自分の姉と結ばれることになり、今では親しく『お兄さん』と呼ぶ関係になってしまった切なくも複雑なドラマです。",
+                points: "元の「どこでよじれた今義兄」では状況の把握に思考を要しますが、直接的に「お兄さんと呼ぶことになってしまった」という具体的結末へ着地。さらに「あかいいと(5) よじれておにい(7) さんとよび(5)」と肉切れ（句またがり）の調律を整えた、非常に技術の高い推敲です。"
+            },
+            {
+                id: 6,
+                original: "AIに愚痴る背中へ妻の愚痴",
+                modified: "AIに愚痴る背中へ妻の愚痴",
+                isModified: false,
+                phrase: ["AIに", "愚痴る背中へ", "妻の愚痴"],
+                author: "まさかず",
+                explanation: "日頃の不満や悩みをスマートスピーカーなどのAIに吐露して慰めてもらっている夫。ところが、その話しかけている背後から、さらに手厳しいリアルな『妻からの愚痴』が飛んでくるという現代的かつ普遍的な家庭風景です。",
+                points: "最先端のAIという現代的な記号を入れ込みながらも、結局は生身の妻の愚痴が最も強く支配しているという、家庭内の哀愁漂う権力構造をワンカットで美しく捉えた句会大絶賛の傑作です。完璧なバランスのため修正はありません。"
+            },
+            {
+                id: 7,
+                original: "亡き友のLINE消せずに既読待つ",
+                modified: "亡き友のLINEを消せずに既読待つ",
+                isModified: true,
+                phrase: ["亡き友の", "LINEを消せずに", "既読待つ"],
+                author: "純子",
+                explanation: "すでにこの世を去ってしまった大切な友人。スマホに残るLINEアカウントやトーク履歴をどうしても削除することができず、あり得ないと知っていても、送った言葉に奇跡的に『既読』のマークがつくことを静かに待っている哀悼の句です。",
+                points: "初出の画像転記の際に「を」が抜け落ちていましたが、句会でも「を」が入っていたことが確認されました。「を」があることで音数が綺麗に整い、友人を失った寂しさと切なさが深く、ゆっくりとした余韻となって読者の心に染み渡ります。"
+            },
+            {
+                id: 8,
+                original: "真似したい最後の時にありがとう",
+                modified: "真似したい最後の時にありがとう",
+                isModified: false,
+                phrase: ["真似したい", "最後の時に", "ありがとう"],
+                author: "しず",
+                explanation: "自分の人生に幕が下りるその瞬間に、周りの人々へ『ありがとう』と心からの感謝の言葉を遺して旅立ちたい。昨今の終活や理想の逝き方の手本を自分もなぞりたいと願う、清々しく前向きな生の目標です。",
+                points: "遺言や生前の感謝メッセージに『ありがとう』と書き添える昨今の流行を取り入れつつ、ストレートにその優しさを表現した一般句として、一切の衒いなくそのまま活かすことで、素直な共感を呼ぶ仕上がりとなっています。"
+            },
+            {
+                id: 9,
+                original: "冷蔵庫の中で暮らせる日は近い",
+                modified: "冷蔵庫の中で暮らせる冷が欲しい",
+                isModified: true,
+                phrase: ["冷蔵庫の", "中で暮らせる", "冷が欲しい"],
+                author: "ひろみつ",
+                explanation: "あまりにも厳しく茹だるような真夏の猛暑。いっそ冷え切った冷蔵庫の狭い空間に身を投じて、そこで暮らしてしまいたいほど、あのキンとした冷気（冷）が心から恋しいと熱望する避暑への願いです。",
+                points: "元の『日は近い』だと、近未来のディストピア的SFを連想させたり、最悪の場合は『冷たい遺体安置室（＝死が近い）』という不穏な解釈を生んでしまう恐れがありました。『冷（ひ）が欲しい』に変更したことで、万人が微笑ましく共感できるピュアな熱中症対策の川柳になりました。"
+            },
+            {
+                id: 10,
+                original: "寝そびれて深夜放送友とする",
+                modified: "寝そびれて深夜放送友とする",
+                isModified: false,
+                phrase: ["寝そびれて", "深夜放送", "友とする"],
+                author: "葉月",
+                explanation: "どうしても夜中に目が冴えてしまって眠れない時間。暗い部屋の中でひっそりと深夜放送（ラジオやテレビ）に耳を傾けていると、パーソナリティの声や音が、まるで孤独な自分を静かに支えてくれる友のように感じられる優しいひとときです。",
+                points: "『深夜放送』という言葉が、昔懐かしいラジオ深夜便のようでもあり、現代の深夜テレビのようでもある、豊かな幅を持たせています。夜のしじまと心の静けさを包み込むように綺麗にまとまっており、完成されています。"
+            },
+            {
+                id: 11,
+                original: "米うなぎ食わぬ作戦夫勝つ",
+                modified: "米うなぎ食わず値下がり待つ夫",
+                isModified: true,
+                phrase: ["米うなぎ", "食わず値下がり", "待つ夫"],
+                author: "春栄",
+                explanation: "物価上昇で高騰するお米や高級うなぎ。それらをただ我慢して惨めに食わないのではなく、養殖成功や供給安定による『価格の下落』を虎視眈々と待ち続け、ついに割安で手に入れた夫の、非常に知的で現代的な大勝利です。",
+                points: "元の『食わぬ作戦夫勝つ』では、何がどう勝ったのか曖昧でした。エピソードにあった『養殖が上手くいって安くなるのを見越して辛抱強く待ち、ついに安く買った』という実情を『値下がり待つ夫』に整理。我慢をエンタメにする夫の愛らしさとユーモアを浮き彫りにしました。"
+            },
+            {
+                id: 12,
+                original: "共生の社会だなんて空手形",
+                modified: "共生の社会だなんて空手形",
+                isModified: false,
+                phrase: ["共生の", "社会だなんて", "空手形"],
+                author: "啓子",
+                explanation: "世間では『多様性』や『共生社会の実現』といった耳当たりの良いスローガンが叫ばれる一方で、実際には弱い立場の人々が取り残されていく現実。それらを『単なる口約束・不渡り手形』にすぎないと鋭く斬り捨てた辛口の風刺です。",
+                points: "作者自身には皇室典範改正などを巡る社会問題への問題意識（背景）がありますが、そこを限定しすぎずに『共生社会』という一般的な語彙にすることで、多くの読者がそれぞれの身の回りの社会の矛盾に当てはめて共感できる、極めて強い硬骨の一句に仕上がっています。"
+            }
+        ];
+
+        // カードのレンダリング
+        function renderCards() {
+            const grid = document.getElementById('senryuGrid');
+            grid.innerHTML = '';
+
+            senryuData.forEach(item => {
+                // 各五七五の行を生成
+                const phraseLines = item.phrase.map(line => `<span>${line}</span>`).join('');
+                
+                // カードのDOM構造を作成（上下余白 py-2 / font-semibold / 行間 leading-tight で非常に詰まったデザイン）
+                const card = document.createElement('div');
+                card.className = "fade-in bg-white rounded-lg shadow-sm border border-slate-200/70 overflow-hidden cursor-pointer hover:-translate-y-1.5 hover:shadow-lg transition-all duration-300 flex flex-col justify-between";
+                card.setAttribute('onclick', `openModal(${item.id})`);
+
+                card.innerHTML = `
+                    <!-- アクセントのグラデーション細い線 -->
+                    <div class="h-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-700"></div>
+                    
+                    <div class="p-3 flex flex-col justify-between h-full">
+                        <!-- 川柳表示 (横書きで上詰めの配置) -->
+                        <div>
+                            <div class="flex flex-col text-[15px] font-bold text-slate-800 leading-tight tracking-wider space-y-0.5">
+                                ${phraseLines}
+                            </div>
+                        </div>
+                        
+                        <!-- 詠み人表示、修正アイコン -->
+                        <div class="mt-2 pt-1.5 border-t border-slate-100 flex justify-between items-center text-[11px]">
+                            <span class="text-slate-500 font-medium">詠み人：<strong class="text-slate-700 font-bold">${item.author}</strong></span>
+                            ${item.isModified 
+                                ? `<span class="bg-emerald-50 text-emerald-700 font-semibold px-1 rounded border border-emerald-200/60 scale-90">推敲済</span>` 
+                                : `<span class="bg-slate-50 text-slate-400 font-medium px-1 rounded border border-slate-200/40 scale-90">そのまま</span>`
+                            }
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // モーダルを開く
+        function openModal(id) {
+            const item = senryuData.find(d => d.id === id);
+            if (!item) return;
+
+            const modal = document.getElementById('detailModal');
+            const modalContent = modal.querySelector('.transform');
+
+            // データのバインド
+            document.getElementById('modalAuthor').textContent = `詠み人： ${item.author}`;
+            document.getElementById('modalAuthorSub').textContent = `（ 詠み人：${item.author} ）`;
+            
+            // 川柳を1行で表示
+            document.getElementById('modalPhrase').textContent = item.modified;
+
+            // 元の句と修正案の対比ボックスの制御
+            const compareBox = document.getElementById('modalCompareBox');
+            if (item.isModified) {
+                compareBox.style.display = 'block';
+                document.getElementById('modalOriginal').textContent = item.original;
+                document.getElementById('modalProposed').textContent = item.modified;
+            } else {
+                compareBox.style.display = 'none';
+            }
+
+            // 解釈と評価ポイント
+            document.getElementById('modalExplanation').textContent = item.explanation;
+            document.getElementById('modalPoints').textContent = item.points;
+
+            // モーダル表示処理（アニメーション用にクラスを追加）
+            modal.classList.remove('hidden');
+            // 少し遅らせることでトランジションを有効化
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        // モーダルを閉じる
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            const modalContent = modal.querySelector('.transform');
+
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+
+            // アニメーション完了後に完全に非表示にする
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // 外側をクリックしたら閉じる設定
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // 初期化ロード
+        window.onload = function() {
+            renderCards();
+        };
+    </script>
+</body>
+</html>
