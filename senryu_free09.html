@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>川柳句会 合評録（自由吟ギャラリー）</title>
+  
+  <!-- Google Fonts: Noto Sans JP & Noto Serif JP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans JP"', 'sans-serif'],
+            serif: ['"Noto Serif JP"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    /* カード浮き上がりアニメーション */
+    .senryu-card {
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .senryu-card:hover {
+      transform: translateY(-4px);
+    }
+    /* スクロールバー装飾 */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-purple-100 selection:text-purple-900">
+
+  <!-- ヘッダー -->
+  <header class="bg-white border-b border-slate-200 shadow-2xs sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-700 via-indigo-600 to-indigo-900 flex items-center justify-center text-white font-serif font-bold text-lg shadow-xs">
+          柳
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            川柳句会 合評録
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200">
+              自由吟 (全13句)
+            </span>
+          </h1>
+        </div>
+      </div>
+      
+      <div class="text-xs text-slate-500 hidden sm:block">
+        カードをクリックで句の<strong>解釈</strong>と<strong>合評・推敲点</strong>を表示
+      </div>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main class="flex-grow max-w-7xl mx-auto w-full px-3 sm:px-6 py-4">
+    <!-- 案内バナー -->
+    <div class="mb-3.5 bg-gradient-to-r from-purple-50/90 via-indigo-50/70 to-slate-50 border border-indigo-100/80 rounded-lg px-3.5 py-2 text-xs text-slate-600 flex items-center justify-between shadow-2xs">
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-purple-600"></span>
+        <span>社会風刺・生活実感・気象異変・日常の可笑しみを詠んだ<strong>自由吟全13句</strong>の合評・推敲録です。</span>
+      </div>
+      <span class="text-[11px] text-purple-700 font-semibold whitespace-nowrap ml-2 bg-white/80 px-2 py-0.5 rounded border border-purple-200/60 shadow-2xs">
+        横4列配置
+      </span>
+    </div>
+
+    <!-- 横4列グリッドコンテナ -->
+    <div id="senryuGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+      <!-- JavaScriptで動的生成 -->
+    </div>
+  </main>
+
+  <!-- モーダルウィンドウ（解釈・評価のポイント ポップアップ） -->
+  <div id="modalOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div id="modalBox" class="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden border border-slate-200 transform scale-95 transition-transform duration-200 flex flex-col max-h-[90vh]">
+      
+      <!-- モーダル上部グラデーション線（紫〜藍色） -->
+      <div class="h-1.5 bg-gradient-to-r from-purple-700 via-indigo-600 to-indigo-950"></div>
+
+      <!-- モーダルヘッダー -->
+      <div class="px-5 py-2.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold px-2 py-0.5 rounded bg-purple-100 text-purple-800 border border-purple-200">
+            自由吟
+          </span>
+          <span id="modalNumber" class="text-xs text-slate-500 font-medium">
+            第 1 句
+          </span>
+        </div>
+        <button id="modalCloseBtn" class="text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 p-1.5 rounded-lg transition-colors" aria-label="閉じる">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- モーダル本文（スクロール可能） -->
+      <div class="p-5 overflow-y-auto space-y-3.5">
+        
+        <!-- 句の提示枠（五七五改行・横書き） -->
+        <div class="bg-gradient-to-br from-purple-50/40 via-indigo-50/30 to-slate-50 p-4 rounded-xl border border-indigo-100/70 text-center">
+          <div id="modalVerse" class="font-serif text-xl sm:text-2xl font-bold text-slate-900 leading-snug tracking-wide space-y-0.5">
+            <!-- 句の行 -->
+          </div>
+          <div class="mt-2.5 text-right">
+            <span class="text-xs text-slate-400">詠み人：</span>
+            <span id="modalAuthor" class="text-sm font-semibold text-indigo-950 bg-white px-2.5 py-0.5 rounded border border-indigo-100 shadow-2xs">
+              <!-- 詠み人名 -->
+            </span>
+          </div>
+        </div>
+
+        <!-- 解釈と評価のポイント（左右均等2列配置） -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+          
+          <!-- 解釈ブロック -->
+          <div class="bg-white p-3.5 rounded-lg border border-slate-200/90 shadow-2xs flex flex-col">
+            <div class="flex items-center gap-1.5 pb-2 mb-2 border-b border-slate-100 text-purple-800 font-bold text-xs sm:text-sm">
+              <svg class="w-4 h-4 text-purple-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              <span>句の解釈・背景</span>
+            </div>
+            <p id="modalInterpretation" class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+              <!-- 解釈文 -->
+            </p>
+          </div>
+
+          <!-- 評価のポイントブロック -->
+          <div class="bg-white p-3.5 rounded-lg border border-slate-200/90 shadow-2xs flex flex-col">
+            <div class="flex items-center gap-1.5 pb-2 mb-2 border-b border-slate-100 text-indigo-800 font-bold text-xs sm:text-sm">
+              <svg class="w-4 h-4 text-indigo-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>合評・推敲のポイント</span>
+            </div>
+            <p id="modalEvaluation" class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+              <!-- 評価ポイント文 -->
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- モーダルフッター -->
+      <div class="px-5 py-2.5 bg-slate-50 border-t border-slate-100 flex justify-end">
+        <button id="modalBottomCloseBtn" class="px-4 py-1.5 text-xs sm:text-sm font-medium rounded-lg bg-slate-800 text-white hover:bg-slate-700 active:scale-98 transition shadow-2xs">
+          閉じる
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <footer class="mt-auto border-t border-slate-200 bg-white py-2.5 text-center text-xs text-slate-400">
+    川柳句会 合評録（自由吟） &copy; 2026
+  </footer>
+
+  <script>
+    /**
+     * 自由吟データ（全13句）
+     * 音声「川柳01」「川柳02」の合評内容を網羅
+     */
+    const jiyuSenryuList = [
+      {
+        id: 1,
+        verseLines: ["台風が", "ゾンビに化けて", "リターン"],
+        author: "ひろみつ",
+        interpretation: "昔のように西から東へと抜けて去るのではなく、一度弱まったり消滅しかけた台風が生き返ったようにUターンして戻ってくる最近の異常気象を詠んでいます。",
+        evaluation: "「ゾンビに化けてリターン」という現代的かつ奇抜な比喩が痛快。予測不能な昨今の迷走台風や天候異変に対する困惑と警戒を、ユーモアたっぷりに戯画化した点が好評でした。"
+      },
+      {
+        id: 2,
+        verseLines: ["秋晴れの", "季語はどこにと", "日々の雨"],
+        author: "かみこ",
+        interpretation: "本来ならば清々しい「秋晴れ」に恵まれるはずの季節なのに、8月後半から連日各地で豪雨と雨続き。「秋晴れという季語はどこへ行ってしまったのか」という嘆きです。",
+        evaluation: "作者の実感が中七の問いかけに強く表れており共感を呼ぶ句。句会では日照不足による果物・秋の農作物への深刻な影響や気候変動の懸念について熱心に語られました。"
+      },
+      {
+        id: 3,
+        verseLines: ["異世界へ", "光と音の", "カフェテラス"],
+        author: "さち",
+        interpretation: "光と音楽が美しく演出されたカフェテラスに足を踏み入れ、まるで日常を離れて異世界（ファンタジーの世界）に迷い込んだかのような陶酔感を詠んでいます。",
+        evaluation: "合評では「別世界」と「異世界」のニュアンスの違いが議論。「別世界」はあの世や冥土・現実離れを連想させるのに対し、「異世界」は現代的なファンタジー感や非日常のきらめきが的確に表現されていると評されました。"
+      },
+      {
+        id: 4,
+        verseLines: ["鍵かけた", "不安で戻り", "遅刻する"],
+        author: "まさかず",
+        interpretation: "出かけた直後に「家の鍵をちゃんとかけたか」「ガスの元栓は閉めたか」と急に不安になり、わざわざ引き返して確認したせいで会社や約束に遅刻してしまう光景です。",
+        evaluation: "誰もが一度は経験する日常の王道あるある句。「電気の消し忘れならまだしも、暖房器具や鍵は戻らざるを得ない」「遅刻するくらいはまだマシ」と笑いと共感が広がりました。"
+      },
+      {
+        id: 5,
+        verseLines: ["新蕎麦と", "海老天二尾の", "ご満悦"],
+        author: "啓子",
+        interpretation: "秋の新蕎麦の香りを楽しみつつ、贅沢に海老の天ぷらを二尾添えていただく至福の食事。ささやかな贅沢を心から喜んでいる満ち足りた表情が浮かびます。",
+        evaluation: "「年金日」などの直接的な生々しい言葉を使わず、「海老天二尾のご満悦」としたことで上品で晴れやかな風情に仕上がっていると好評価。「五万円」より詩情が際立っています。"
+      },
+      {
+        id: 6,
+        verseLines: ["地方長", "天下取ったと", "思ったか"],
+        author: "しず",
+        interpretation: "たかが一地方の首長（知事や市長など）に過ぎないのに、まるで天下人や王様にでもなったかのように職員に横柄に振る舞いパワハラをする人物への厳しい批判です。",
+        evaluation: "「裸の王様」と化した権力者への痛烈な風刺。公僕であるはずの立場を勘違いした振る舞いに対し、川柳本来の鋭い社会風刺・批判精神が力強く発揮されています。"
+      },
+      {
+        id: 7,
+        verseLines: ["総務省", "良心破棄し", "他人ごと"],
+        author: "びいき",
+        interpretation: "行政の不都合な公文書を平然と隠蔽・破棄し、責任追及に対しても他人事のように涼しい顔でかわす官僚組織（総務省）の無責任体質を糾弾した一句。",
+        evaluation: "合評では「文書破棄」と「良心破棄」を重ねる推敲案（例:『文書破棄 良心も破棄 総務省』）なども検討され、国家行政への市民の強い憤りと風刺が込められた硬派な作例です。"
+      },
+      {
+        id: 8,
+        verseLines: ["秋の夜は", "虫の音聴いて", "熟睡だ"],
+        author: "邦さん",
+        interpretation: "秋の夜長に心地よく響く虫の声を天然の子守唄（BGM）にして、心穏やかにぐっすり熟睡できる幸せを詠んだ素直な秋の情景句です。",
+        evaluation: "「虫の音（声）」自体が秋の季語であるため「秋の夜」が重複するという指摘もありつつ、快眠できる素朴な喜びが素直に伝わる句。「熟睡のBGM」など川柳風の誇張推敲案も語られました。"
+      },
+      {
+        id: 9,
+        verseLines: ["知らんがな", "「じゃないですか」", "と言われても"],
+        author: "純子",
+        interpretation: "「私って〜じゃないですか」と初対面や会話の中で押し付けがましく同意を求めてくる話し方に対し、心の中で「知らんがな！」と強烈に突っ込む心情です。",
+        evaluation: "現代の若者言葉や過剰な承認欲求・共感押し付けへの痛快なツッコミ。会話の違和感を鋭く切り取っており、「本当にそう言いたくなる」と参加者全員が大喝采しました。"
+      },
+      {
+        id: 10,
+        verseLines: ["琉球の", "嵐は去りて", "所得倍"],
+        author: "斎木",
+        interpretation: "選挙や激しい政局（嵐）を通り抜けた沖縄において、かつての所得倍増計画のように、今後は低水準にとどまる県民の平均所得が実際に倍増して暮らしが豊かになることを願う句。",
+        evaluation: "歴史的政治用語の「所得倍増」と沖縄の切実な現状を結びつけた骨太な一句。政治的混乱の後に期待される生活再建への希望と皮肉が絶妙なバランスで詠まれています。"
+      },
+      {
+        id: 11,
+        verseLines: ["言い訳が", "思いつかない", "締め切り日"],
+        author: "ちゑ",
+        interpretation: "原稿や仕事の締め切りが目前に迫り、今まで使ってきた数々の言い訳（身内の急病など）のレパートリーが尽きてしまい、もはや言い逃れができなくなった絶体絶命の瞬間。",
+        evaluation: "「言い訳が底をついた」という切羽詰まった心理に全員が爆笑し、句会で圧倒的な共感点を獲得。「共感句は強い」という川柳の本質を体現した見事な作品です。"
+      },
+      {
+        id: 12,
+        verseLines: ["雨雨だ", "ノアの方舟", "信じよう"],
+        author: "春栄",
+        interpretation: "いつまでも降り止まない豪雨と水害の不安の中、聖書の「ノアの箱舟」の奇跡のような救いを信じるしかないという、切実な思いと一筋の希望です。",
+        evaluation: "「やまない雨はない」と言いつつも、終わりが見えない異常気象に対する人々の不安を旧約聖書の箱舟伝説と結びつけた重みのある一句。災害への切実な祈りが響きます。"
+      },
+      {
+        id: 13,
+        verseLines: ["あかい花", "秋のしらせの", "まんじゅしゃげ"],
+        author: "葉月",
+        interpretation: "彼岸の頃になると葉もないまま突如として真っ赤に咲き誇り、秋の到来を告げる曼珠沙華（彼岸花）のどこか妖しくも鮮やかな風情を詠んだ句。",
+        evaluation: "ひらがな表記の柔らかさと花の妖艶さの対比。合評では根に毒があり鼠よけとして畦道に植えられた歴史や、埼玉・巾着田などの名所の美しさが話題に花を咲かせました。"
+      }
+    ];
+
+    const gridContainer = document.getElementById('senryuGrid');
+
+    /**
+     * 川柳カードのHTML要素を生成
+     */
+    function renderCards() {
+      gridContainer.innerHTML = '';
+
+      jiyuSenryuList.forEach((item) => {
+        // カード要素
+        const card = document.createElement('div');
+        card.className = "senryu-card bg-white rounded-lg border border-slate-200/90 shadow-2xs hover:shadow-md cursor-pointer flex flex-col justify-between overflow-hidden relative group";
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `${item.verseLines.join(' ')} 詠み人: ${item.author}`);
+
+        // 上部の紫〜藍色グラデーション細線
+        const topBar = document.createElement('div');
+        topBar.className = "h-1 w-full bg-gradient-to-r from-purple-700 via-indigo-600 to-indigo-950";
+
+        // カード本文コンテンツ（上下の空白少なく・行間を詰めた設計）
+        const content = document.createElement('div');
+        content.className = "px-3 py-2 flex flex-col justify-between h-full gap-1.5";
+
+        // 番号バッジと句の配置
+        const mainArea = document.createElement('div');
+        mainArea.className = "space-y-1";
+
+        const badgeRow = document.createElement('div');
+        badgeRow.className = "flex items-center justify-between";
+
+        const numBadge = document.createElement('span');
+        numBadge.className = "text-[11px] font-semibold text-purple-700/90 tracking-wider";
+        numBadge.textContent = `#${item.id}`;
+
+        const catBadge = document.createElement('span');
+        catBadge.className = "text-[10px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 border border-purple-100/70";
+        catBadge.textContent = "自由吟";
+
+        badgeRow.appendChild(numBadge);
+        badgeRow.appendChild(catBadge);
+
+        // 五七五の横書き川柳（行間を詰め、指定通りの横書き改行）
+        const verseEl = document.createElement('div');
+        verseEl.className = "font-serif text-[14px] sm:text-[15px] font-semibold text-slate-900 leading-tight tracking-normal space-y-0.5 pt-0.5";
+        
+        item.verseLines.forEach((line) => {
+          const lineSpan = document.createElement('div');
+          lineSpan.textContent = line;
+          verseEl.appendChild(lineSpan);
+        });
+
+        mainArea.appendChild(badgeRow);
+        mainArea.appendChild(verseEl);
+
+        // 詠み人（句の後に記述）
+        const footerArea = document.createElement('div');
+        footerArea.className = "pt-1 border-t border-slate-100 flex items-center justify-between text-xs";
+        
+        const clickHint = document.createElement('span');
+        clickHint.className = "text-[10px] text-slate-400 group-hover:text-purple-600 transition-colors flex items-center gap-0.5";
+        clickHint.innerHTML = `詳細 <svg class="w-2.5 h-2.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+
+        const authorEl = document.createElement('div');
+        authorEl.className = "font-medium text-slate-700 text-xs tracking-wide";
+        authorEl.textContent = `― ${item.author}`;
+
+        footerArea.appendChild(clickHint);
+        footerArea.appendChild(authorEl);
+
+        content.appendChild(mainArea);
+        content.appendChild(footerArea);
+
+        card.appendChild(topBar);
+        card.appendChild(content);
+
+        // クリックイベント
+        card.addEventListener('click', () => openModal(item));
+        
+        // キーボード操作対応 (Enter / Space)
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openModal(item);
+          }
+        });
+
+        gridContainer.appendChild(card);
+      });
+    }
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalBox = document.getElementById('modalBox');
+    const modalNumber = document.getElementById('modalNumber');
+    const modalVerse = document.getElementById('modalVerse');
+    const modalAuthor = document.getElementById('modalAuthor');
+    const modalInterpretation = document.getElementById('modalInterpretation');
+    const modalEvaluation = document.getElementById('modalEvaluation');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const modalBottomCloseBtn = document.getElementById('modalBottomCloseBtn');
+
+    function openModal(item) {
+      modalNumber.textContent = `第 ${item.id} 句`;
+      
+      // 五七五の横書き改行
+      modalVerse.innerHTML = item.verseLines.map(line => `<div>${line}</div>`).join('');
+      modalAuthor.textContent = item.author;
+      modalInterpretation.textContent = item.interpretation;
+      modalEvaluation.textContent = item.evaluation;
+
+      // モーダル表示アニメーション
+      modalOverlay.classList.remove('pointer-events-none', 'opacity-0');
+      modalOverlay.classList.add('opacity-100');
+      modalBox.classList.remove('scale-95');
+      modalBox.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modalOverlay.classList.add('opacity-0', 'pointer-events-none');
+      modalOverlay.classList.remove('opacity-100');
+      modalBox.classList.add('scale-95');
+      modalBox.classList.remove('scale-100');
+      document.body.style.overflow = '';
+    }
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalBottomCloseBtn.addEventListener('click', closeModal);
+    
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        closeModal();
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modalOverlay.classList.contains('pointer-events-none')) {
+        closeModal();
+      }
+    });
+
+    // 画面ロード時に実行
+    window.onload = function() {
+      renderCards();
+    };
+  </script>
+</body>
+</html>
