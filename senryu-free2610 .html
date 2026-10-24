@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>川柳句会 作品一覧（自由吟）</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* モーダルアニメーション用 */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen py-6 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- ヘッダー -->
+        <header class="mb-6 text-center">
+            <span class="inline-block px-3 py-1 mb-2 text-xs font-semibold tracking-wider text-indigo-700 uppercase bg-indigo-100 rounded-full">自由吟</span>
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">川柳句会 作品一覧と講評</h1>
+            <p class="mt-1 text-sm text-slate-500">カードをクリックすると、句の解釈と評価のポイントが表示されます</p>
+        </header>
+
+        <!-- 川柳グリッドコンテナ（横4列レイアウト、上下の空白を少なめに設定） -->
+        <main id="senryu-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-3">
+            <!-- JavaScriptによってカードがここに挿入されます -->
+        </main>
+    </div>
+
+    <!-- ポップアップ（モーダルウィンドウ） -->
+    <div id="modal-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-opacity duration-200" onclick="closeModal()">
+        <div id="modal-content" class="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden transform transition-all" onclick="event.stopPropagation()">
+            <!-- モーダル上部のグラデーションライン -->
+            <div class="h-2 bg-gradient-to-r from-purple-600 to-indigo-800"></div>
+            
+            <div class="p-6">
+                <!-- 句と詠み人の表示エリア -->
+                <div class="bg-slate-50 rounded-lg p-4 mb-5 border border-slate-100 text-center">
+                    <p id="modal-poem" class="text-xl font-bold text-slate-800 leading-snug tracking-wide"></p>
+                    <p id="modal-poet" class="text-sm font-medium text-indigo-600 mt-2"></p>
+                </div>
+
+                <!-- 解釈と評価のポイント -->
+                <div class="space-y-4">
+                    <div class="bg-purple-50/60 rounded-lg p-4 border-l-4 border-purple-500">
+                        <div class="flex items-center mb-1.5">
+                            <svg class="w-4 h-4 text-purple-600 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                            <h3 class="text-sm font-bold text-purple-900">句の解釈</h3>
+                        </div>
+                        <p id="modal-interpretation" class="text-sm text-slate-700 leading-relaxed"></p>
+                    </div>
+
+                    <div class="bg-indigo-50/60 rounded-lg p-4 border-l-4 border-indigo-600">
+                        <div class="flex items-center mb-1.5">
+                            <svg class="w-4 h-4 text-indigo-600 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <h3 class="text-sm font-bold text-indigo-900">評価のポイント</h3>
+                        </div>
+                        <p id="modal-evaluation" class="text-sm text-slate-700 leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <!-- 閉じるボタン -->
+                <div class="mt-6 text-right">
+                    <button onclick="closeModal()" class="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white text-sm font-medium rounded-lg shadow transition duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        閉じる
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 川柳データ（五七五や意味の区切りを考慮した配列・解釈・評価のポイント）
+        const senryuData = [
+            {
+                id: 1,
+                lines: ["もうやめる", "決意を変えた", "誉め言葉"],
+                poet: "かみこ",
+                interpretation: "稽古事や川柳などで、スランプが続き「もうやめようかな」と思っていたところに、先生や周囲から温かい誉め言葉をもらい、もう少し頑張ってみようと思い直した嬉しい瞬間を詠んでいます。",
+                evaluation: "原句の「たまの上手で」よりも「決意を変えた誉め言葉」と推敲したことで、なぜやめるのを思いとどまったのかが誰にでもすっきりと伝わるようになりました。「誉め上手」とするとお世辞のニュアンスが出るため、「誉め言葉」とした点も絶妙です。"
+            },
+            {
+                id: 2,
+                lines: ["自由だね", "おまえはいいね", "赤とんぼ"],
+                poet: "啓子",
+                interpretation: "秋の空を誰に縛られることもなくスイスイと飛び回る赤とんぼを見上げながら、「おまえは自由でいいねえ」と羨むように語りかけているほのぼのとした情景です。",
+                evaluation: "川柳には俳句のような季語の決まりはありませんが、10月の句会にふさわしい「赤とんぼ」を取り入れることで、季節感と秋の空の広がりが自然に感じられる心地よい一句になっています。"
+            },
+            {
+                id: 3,
+                lines: ["使途不明", "共同募金", "不正滅"],
+                poet: "さち",
+                interpretation: "せっかく集められた共同募金が使途不明になるような不正問題に対し、そうした不正は「滅（ダメ・撲滅すべき）」であると強く訴える時事川柳です。",
+                evaluation: "原句の「善意の募金」から助詞の「の」を省くため「共同募金」と推敲したことで、17音すべてが漢字のみで構成されるユニークな「漢字川柳（漢文調）」に仕上がりました。流行語の「滅」を効かせた力強い作品です。"
+            },
+            {
+                id: 4,
+                lines: ["クーポン券", "使う時には", "期限切れ"],
+                poet: "しず",
+                interpretation: "お得だと思って大切に取っておいたクーポン券やポイントを、いざ使おうと出した時にはすでに有効期限が切れていたという、日常の「あるある」を詠んでいます。",
+                evaluation: "誰もが経験したことのある悔しさや可笑しみを、五七五の無駄のないリズムで軽妙に切り取っています。読者の共感を強く呼ぶ、川柳らしい親しみやすさに満ちた一句です。"
+            },
+            {
+                id: 5,
+                lines: ["降り続く", "雨が壊した", "印旛沼"],
+                poet: "葉月",
+                interpretation: "記録的な長雨や豪雨によって、身近な印旛沼の周辺や堤防などが被害を受けてしまったことへの驚きと嘆きを詠んでいます。",
+                evaluation: "原句の「雨が沼まで壊してしまう」という字余りから、具体的な固有名詞である「印旛沼（5音）」を下五（座五）に据えて推敲したことで、17音にピタリと収まり、地域のリアルな実感と迫力がグッと増しました。"
+            },
+            {
+                id: 6,
+                lines: ["お茶すすり", "黙る地蔵が", "酒で咲く"],
+                poet: "まさかず",
+                interpretation: "お茶を飲んでいる昼間の集まりではお地蔵様のように無口で黙り込んでいる人が、お酒の席になると急に饒舌になり笑顔で話に花を咲かせる様子をユーモラスに描いています。",
+                evaluation: "無口な人を「黙る地蔵」と表現し、お酒が入って陽気に喋り出す様子を「酒で咲く」と対比させた見事な技巧です。「お茶」と「酒」、「黙る」と「咲く」のコントラストが鮮やかで笑いを誘います。"
+            },
+            {
+                id: 7,
+                lines: ["食欲の", "秋にためらう", "サンマ高"],
+                poet: "ひろみつ",
+                interpretation: "せっかくの食欲の秋なのに、庶民の味方であったはずのサンマの値段が高騰していて、買うのを思わずためらってしまうという世相を詠んでいます。",
+                evaluation: "秋の味覚の象徴である「サンマ」に焦点を当て、物価高のニュースと日常の買い物での実感をスラスラと読める五七五の好リズムでまとめています。カタカナ表記の「サンマ」も視覚的に分かりやすく効果的です。"
+            },
+            {
+                id: 8,
+                lines: ["読書会", "今日のテーマに", "花が咲く"],
+                poet: "たけちゃん",
+                interpretation: "普段は静かな読書会でも、今日取り上げられたテーマの本がみんなの関心にピタリと合い、感想や意見交換で大いに盛り上がった様子を詠んでいます。",
+                evaluation: "原句の「語り合うほど」から「今日のテーマに」と推敲したことで、「今回の特定のテーマ（本）だからこそ特別に盛り上がった」という具体性と臨場感がより鮮明に伝わるようになりました。"
+            },
+            {
+                id: 9,
+                lines: ["肩透かし", "政治屋たちの", "得意ワザ"],
+                poet: "びいき",
+                interpretation: "正面からの質問に対してまともに答えず、巧妙にはぐらかして国民に肩透かしを食わせるような政治家たちの姿を鋭く風刺しています。",
+                evaluation: "「政治家」ではなく、あえて皮肉を込めて「政治屋」と表現した点に作者の批評精神が光ります。期待を裏切られ続ける現代の政治状況を「得意ワザ」とバッサリ斬り捨てた痛快な時事吟です。"
+            },
+            {
+                id: 10,
+                lines: ["医師いわく", "夫婦で丈夫は", "奇跡だと"],
+                poet: "春栄",
+                interpretation: "高齢になると夫婦のどちらかが体調を崩しがちになる中、お医者さんから「ご夫婦そろってこんなに丈夫なのは奇跡ですよ」と太鼓判を押された喜びを詠んでいます。",
+                evaluation: "夫婦ともに健康であることのありがたみを「医師いわく〜奇跡だと」という会話調で生き生きと表現しています。中七は「は」を省いて「夫婦で丈夫（7音）」と読むと、さらにリズムが整います。"
+            },
+            {
+                id: 11,
+                lines: ["衣替え", "自問自答の", "いつ着るの"],
+                poet: "ちゑ",
+                interpretation: "季節の変わり目に衣替えをしながら、ずっと着ていない服を手に取り「これ、一体いつ着るの？もう処分した方がいいのでは…」と自問自答している光景です。",
+                evaluation: "洗濯してしまってあるけれど来年も着るか分からない服を前に、捨てるか残すか迷う「断捨離」の心理を「自問自答のいつ着るの」と軽妙に表現しており、多くの人が共感できる楽しい一句です。"
+            },
+            {
+                id: 12,
+                lines: ["老いじたく", "預金筋肉", "好奇心"],
+                poet: "純子",
+                interpretation: "これからの老後を豊かに生き抜くための準備（老いじたく）として、お金（預金・資金）と体力（筋肉）、そして何より心の若さである「好奇心」の3つが大切だと詠んでいます。",
+                evaluation: "原句の「資金筋肉必須です」から、下五を「好奇心」に推敲したことで、「キン（金・筋）」と「シン（心）」で心地よく韻を踏みつつ、「お金・体・気持ち」の三拍子が揃った非常に前向きで力強い名句に生まれ変わりました。"
+            }
+        ];
+
+        const gridContainer = document.getElementById('senryu-grid');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalPoem = document.getElementById('modal-poem');
+        const modalPoet = document.getElementById('modal-poet');
+        const modalInterpretation = document.getElementById('modal-interpretation');
+        const modalEvaluation = document.getElementById('modal-evaluation');
+
+        // カードの生成と表示
+        function renderCards() {
+            gridContainer.innerHTML = '';
+            senryuData.forEach(item => {
+                const card = document.createElement('div');
+                // カードのスタイル: 上下余白少なめ、ホバーで少し浮き上がるアニメーション
+                card.className = "bg-white rounded-lg shadow-sm hover:shadow-md border border-slate-200/80 overflow-hidden cursor-pointer transition-all duration-200 transform hover:-translate-y-1 flex flex-col justify-between";
+                card.onclick = () => openModal(item);
+
+                // 五七五の改行を含む句のHTML生成（行間を詰める: leading-tight）
+                const poemHtml = item.lines.map(line => `<span class="block">${line}</span>`).join('');
+
+                card.innerHTML = `
+                    <!-- 上部の紫から藍色へのグラデーションライン -->
+                    <div class="h-1.5 w-full bg-gradient-to-r from-purple-500 to-indigo-700"></div>
+                    
+                    <!-- カード本体（上下の空白を少なく、行間も詰める） -->
+                    <div class="px-4 py-2.5 flex flex-col justify-between flex-grow">
+                        <div class="text-base sm:text-lg font-bold text-slate-800 leading-tight tracking-tight">
+                            ${poemHtml}
+                        </div>
+                        <div class="mt-1.5 pt-1 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-[11px] font-medium text-slate-400">No.${item.id}</span>
+                            <span class="text-xs sm:text-sm font-medium text-indigo-700">${item.poet}</span>
+                        </div>
+                    </div>
+                `;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        // モーダルを開く関数
+        function openModal(item) {
+            modalPoem.innerHTML = item.lines.join('<br>');
+            modalPoet.textContent = `詠み人：${item.poet}`;
+            modalInterpretation.textContent = item.interpretation;
+            modalEvaluation.textContent = item.evaluation;
+
+            modalOverlay.classList.remove('hidden');
+            modalOverlay.classList.add('flex');
+        }
+
+        // モーダルを閉じる関数
+        function closeModal() {
+            modalOverlay.classList.add('hidden');
+            modalOverlay.classList.remove('flex');
+        }
+
+        // Escキーでもモーダルを閉じられるように設定
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        // 初期描画
+        renderCards();
+    </script>
+</body>
+</html>
