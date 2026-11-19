@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>川柳句会 講評・解釈アーカイブ（自由吟・全12句）</title>
+  <!-- Google Fonts: Noto Sans JP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans JP"', 'sans-serif'],
+          },
+          colors: {
+            washi: '#f8f6f0',
+            sumi: '#2c2a29',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-washi text-sumi font-sans antialiased min-h-screen selection:bg-indigo-200 selection:text-indigo-900">
+
+  <!-- ページ全体のコンテナ -->
+  <div class="max-w-7xl mx-auto px-3 sm:px-5 py-4 sm:py-5">
+
+    <!-- ヘッダー -->
+    <header class="mb-4 pb-3 border-b border-stone-300/80 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="inline-block w-2 h-5 rounded-full bg-gradient-to-b from-purple-600 to-indigo-900"></span>
+          <h1 class="text-lg sm:text-2xl font-bold tracking-wide text-indigo-950">
+            川柳句会 講評・解釈アーカイブ（自由吟・全12句）
+          </h1>
+        </div>
+        <p class="text-xs sm:text-sm text-stone-600 pl-4">
+          各カードをクリックすると「解釈・背景」「評価のポイント」「推敲ヒント」が開きます。
+        </p>
+      </div>
+
+      <!-- 一括開閉トグルボタン -->
+      <div class="flex-shrink-0 pl-4 sm:pl-0">
+        <button
+          id="toggleAllBtn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium text-white bg-gradient-to-r from-purple-700 to-indigo-900 hover:from-purple-600 hover:to-indigo-800 shadow-sm hover:shadow transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-washi"
+          aria-expanded="false"
+        >
+          <svg id="toggleAllIcon" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+          <span id="toggleAllText">すべて開く</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- カード一覧グリッド（横4列レスポンシブ） -->
+    <main>
+      <div id="senryuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-start">
+        <!-- JavaScriptでカードを描画 -->
+      </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="mt-6 pt-3 border-t border-stone-200/80 text-center text-xs text-stone-500">
+      川柳句会 講評・解釈アーカイブ ／ 自由吟 全12句収録
+    </footer>
+  </div>
+
+  <!-- 拡大表示モーダル -->
+  <div
+    id="senryuModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-stone-950/60 backdrop-blur-xs transition-opacity duration-200"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+  >
+    <div
+      id="modalContent"
+      class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-[#fcfbf8] rounded-2xl shadow-2xl border border-stone-200 overflow-hidden"
+    >
+      <!-- モーダル上部グラデーション線 -->
+      <div class="h-1.5 w-full bg-gradient-to-r from-purple-600 to-indigo-900"></div>
+
+      <!-- モーダルヘッダー -->
+      <div class="flex items-start justify-between gap-4 px-6 pt-5 pb-3 border-b border-stone-200/80">
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <span id="modalBadge" class="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-bold text-white bg-indigo-900 tracking-wider"></span>
+          <h2 id="modalTitle" class="text-lg sm:text-xl font-bold text-indigo-950"></h2>
+        </div>
+        <button
+          id="modalCloseTopBtn"
+          type="button"
+          class="p-2 rounded-lg text-stone-500 hover:text-indigo-900 hover:bg-stone-200/70 transition focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          aria-label="閉じる"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- モーダル本文 -->
+      <div class="px-6 py-5 space-y-5">
+        <!-- 句と詠み人 -->
+        <div class="bg-washi/90 border border-stone-200/90 rounded-xl p-5 sm:p-6">
+          <p id="modalKu" class="whitespace-pre-line text-2xl sm:text-3xl font-bold text-sumi leading-relaxed tracking-wider"></p>
+          <div class="mt-3 text-right">
+            <span class="inline-block text-sm sm:text-base font-medium text-indigo-900 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+              詠み人：<span id="modalAuthor"></span>
+            </span>
+          </div>
+        </div>
+
+        <!-- 解釈・評価・推敲 -->
+        <div class="space-y-4">
+          <section class="bg-white rounded-xl p-4 border border-stone-200/80 shadow-xs">
+            <h3 class="inline-flex items-center gap-1.5 text-sm font-bold text-indigo-900 mb-1.5">
+              <span class="w-2 h-2 rounded-full bg-indigo-700"></span>
+              解釈・背景
+            </h3>
+            <p id="modalInterpretation" class="text-base sm:text-lg text-stone-800 leading-relaxed"></p>
+          </section>
+
+          <section class="bg-white rounded-xl p-4 border border-stone-200/80 shadow-xs">
+            <h3 class="inline-flex items-center gap-1.5 text-sm font-bold text-purple-900 mb-1.5">
+              <span class="w-2 h-2 rounded-full bg-purple-700"></span>
+              評価のポイント
+            </h3>
+            <p id="modalPoints" class="text-base sm:text-lg text-stone-800 leading-relaxed"></p>
+          </section>
+
+          <section class="bg-white rounded-xl p-4 border border-stone-200/80 shadow-xs">
+            <h3 class="inline-flex items-center gap-1.5 text-sm font-bold text-amber-900 mb-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-600"></span>
+              推敲ヒント
+            </h3>
+            <p id="modalTips" class="text-base sm:text-lg text-stone-800 leading-relaxed"></p>
+          </section>
+        </div>
+      </div>
+
+      <!-- モーダルフッター -->
+      <div class="px-6 py-3.5 bg-stone-100/80 border-t border-stone-200/80 flex justify-end">
+        <button
+          id="modalCloseBottomBtn"
+          type="button"
+          class="px-5 py-2 rounded-lg text-sm font-medium text-white bg-gradient-to-r from-purple-700 to-indigo-900 hover:from-purple-600 hover:to-indigo-800 shadow-xs transition focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          閉じる
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * 川柳句会 作品データ（全12句）
+     * 各要素: id, ku, author, theme, interpretation, points, revision
+     */
+    const senryuData = [
+      {
+        id: 1,
+        ku: "わいわいと\n同じ顔ぶれ\n税談義",
+        author: "斎木",
+        theme: "政治家・コメンテーターの顔ぶれ",
+        interpretation: "テレビや議会などで、いつも同じ顔ぶれの政治家やコメンテーターが集まり、税金の話ばかりを賑やかに繰り返している様子を風刺した一句。一見すると仲間内の語らいにも見えるが、実態は変わり映えしない議論への皮肉が込められている。",
+        points: "「同じ顔ぶれ」という表現で、議論のマンネリ感や閉塞感を的確に捉えている。日常会話のトーンで時事問題を切り取った点が共感を呼ぶ。",
+        revision: "自由句であれば「わいわいと」を「賑やかに」に変えたり、より皮肉や苛立ちを強めるなら「うるさいよ」「うるせえな」といった踏み込んだ言い回しにすることで、風刺の切れ味を増すことができる。"
+      },
+      {
+        id: 2,
+        ku: "衛兵に\n溜飲下がる\n米の民",
+        author: "しず",
+        theme: "米国の民衆と時事風刺",
+        interpretation: "衛兵の振る舞いや出来事に対し、米国の民衆が日頃のうっぷんを晴らして溜飲を下げている情景を詠んだ時事川柳。民衆の目線から見たすっきり感や皮肉が背景にある。",
+        points: "「溜飲下がる」という慣用句が感情の動きを端的に伝えており、民衆の立場に寄り添った視点が面白い。",
+        revision: "「米の民」は普段あまり使われない表現のため、誰のことか・どんな状況かを読み手が瞬時にイメージできる言い回しを工夫すると、さらに伝わりやすくなる。"
+      },
+      {
+        id: 3,
+        ku: "故郷の\n裏道だけが\nわかる道",
+        author: "かみこ",
+        theme: "故郷の裏道",
+        interpretation: "開発などで表通りが大きく変わってしまった故郷でも、昔ながらの裏道だけは今も変わらず残っており、自分の記憶と一致する大切な場所であるという懐かしさを詠んだ一句。",
+        points: "作者の故郷への温かな思いや、変わらない風景への愛着が根底にある。表と裏の対比から時の流れを感じさせる視点が良い。",
+        revision: "「わかる道」だと初見では意味が伝わりにくいため、「裏道だけは 覚えている」「裏道だけは 変わらない」などとすると情景が明確になる。（逆に「裏道さえも 消えている」とすると寂しいニュアンスに変化する）"
+      },
+      {
+        id: 4,
+        ku: "子供らが\nしっぽになった\nチンドン屋",
+        author: "ひろみつ",
+        theme: "チンドン屋さん",
+        interpretation: "賑やかに街を練り歩くチンドン屋さんの後ろに、大勢の子供たちが列を作ってついて歩き、まるで長い「しっぽ」のように見えた昭和の懐かしい光景を詠んだ一句。",
+        points: "ついて歩く子供たちの列を「しっぽ」と表現した比喩が非常に秀逸で、映像と賑やかな音がパッと浮かぶ。",
+        revision: "比喩とリズムが完成されており、そのままでも情景が十分に伝わる。当時の高揚感や街の空気感がよく出ている。"
+      },
+      {
+        id: 5,
+        ku: "孫は滝\n爺は小雨だ\n男の差",
+        author: "まさかず",
+        theme: "孫と爺の立ちション",
+        interpretation: "孫と祖父が並んで用を足す（連れション）場面で、成長した孫の勢いある「滝」と、年を重ねた祖父の勢いのない「小雨」を対比させ、世代間の「男の差」をユーモラスに描いた一句。",
+        points: "「滝」と「小雨」という大胆な対比が抜群に面白く、イラストや漫画にすれば一発で大笑いできる視覚的な魅力がある。",
+        revision: "「男の差」がやや説明的になりやすいため、語順や表現を工夫して「滝の孫 小水の爺 飛ばしっこ」「並んでる」「連れ立って」など情景を示す言葉を入れると、文字だけでも瞬時に絵が浮かぶようになる。"
+      },
+      {
+        id: 6,
+        ku: "異郷の地\n筆談笑顔\nハグの仲",
+        author: "純子",
+        theme: "異郷の地での心の交流",
+        interpretation: "言葉の通じない外国（異郷の地）であっても、筆談や身振り手振り、表情や簡単な絵などを通して心を通わせ、最後には笑顔でハグするほど親しくなった温かな体験を詠んだ一句。",
+        points: "言葉の壁を超えて人と人が通じ合う「人間の温かみ」が、「筆談笑顔」「ハグの仲」という短い言葉のリズムの中に心地よく凝縮されている。",
+        revision: "シベリアなどの厳しい体験を思い起こす声も上がるほど、異国での交流の尊さが伝わる構成。情景の展開（異郷→筆談・笑顔→ハグ）がスムーズで分かりやすい。"
+      },
+      {
+        id: 7,
+        ku: "紅白は\nなじみの歌手と\n演歌消え",
+        author: "びいき",
+        theme: "紅白歌合戦と横文字の歌手名",
+        interpretation: "かつて楽しみにしていた紅白歌合戦から、馴染みの歌手や演歌が姿を消し、何語かも分からない横文字・アルファベット表記のグループばかりになってしまった寂しさと戸惑いを詠んだ一句。",
+        points: "昭和・平成・令和を生き抜いてきた世代のリアルな実感（「読めないから声に出せない」という本音）が凝縮されており、同世代の強い共感を呼ぶ。",
+        revision: "時代への寂しさや戸惑いがストレートに伝わっている。あえて「読めぬ横文字」などの具体的な違和感に焦点を当てた別案を作ってみても面白い。"
+      },
+      {
+        id: 8,
+        ku: "秋花火\n響く歓声\n缶ビール",
+        author: "ちゑ",
+        theme: "秋の花火と缶ビール",
+        interpretation: "夏の風物詩である花火を、澄んだ空気の秋に楽しむひととき。夜空に響く歓声と、秋になってもやはり似合う冷えた缶ビールの心地よさを鮮やかに切り取った一句。",
+        points: "夏の季語である花火をあえて「秋花火」と明示したことで季節の意外性が生まれ、澄んだ秋の夜気と缶ビールの取り合わせが絶妙な味わいを出している。",
+        revision: "体言止めと名詞の積み重ね（秋花火・歓声・缶ビール）でテンポと臨場感が抜群に良く、完成度の高い一句。"
+      },
+      {
+        id: 9,
+        ku: "交付金\nもらう為だと\n一人党",
+        author: "邦さん",
+        theme: "政治の裏金・政党交付金と悪知恵",
+        interpretation: "本来なら解散すべき状況であっても、1人でも残っていれば政党として存続でき、政党交付金を受け取れるという法の抜け穴を突く政治家の浅ましさと悪知恵を痛烈に風刺した一句。",
+        points: "「法的には問題ない」と居座る政治の歪みを、「一人党」というキャッチーな言葉でズバリと斬り込んだ切れ味が素晴らしい。",
+        revision: "社会風刺としての焦点が明確で、無駄がない。読み手の「浅ましいな」という感情をストレートに引き出している。"
+      },
+      {
+        id: 10,
+        ku: "あちこちと\n広げただけの\n衣替え",
+        author: "さち",
+        theme: "衣替え（説明と描写の違い）",
+        interpretation: "衣替えをしようと意気込んで服をあちこちに引っ張り出したものの、結局収拾がつかなくなり、広げただけで終わってしまった日常の「あるある」を詠んだ一句。",
+        points: "「片付かず」と直接説明せず、「広げただけの 衣替え」と言い切ることで、その後の散らかった部屋の様子やため息を読み手に想像させる巧みな描写になっている。",
+        revision: "講評で「広げただけで片付かず」と説明してしまうと散文になる点が指摘された通り、「広げただけの」と止めて余白を残すことで、読み手に「片付かなかったんだな」と察しさせるのが川柳の腕の見せ所。"
+      },
+      {
+        id: 11,
+        ku: "日記買う\n秘密の話\nあのねのね",
+        author: "啓子",
+        theme: "日記帳を買う季節と秘密の話",
+        interpretation: "年末に向けて店頭に日記帳が並ぶ季節、新しい日記帳を買い求め、誰にも言えない秘密の話を「あのねのね」とそっと打ち明けるような可愛らしい心情を詠んだ一句。",
+        points: "「あのねのね」という語りかけるようなリズムがとても可愛らしく、句会でも「一行日記を大学ノートで続ける工夫」など大いに話が弾む魅力的なテーマ。",
+        revision: "毎年書き続けているニュアンスを出したい場合は、「来年も 秘密の話 日記買う」「来年も 内緒話に 日記買う」とすると時間の広がりが生まれる。元の「あのねのね」の可愛らしさも大きな持ち味。"
+      },
+      {
+        id: 12,
+        ku: "靴下は\n右親指に\n穴があく",
+        author: "春栄",
+        theme: "靴下と右の親指の穴",
+        interpretation: "歩き方や足の癖のせいか、靴下を履いているといつも決まって右足の親指のところばかりに穴が開いてしまうという、身近で微笑ましい生活の実感を詠んだ一句。",
+        points: "日常のささやかな発見に「あるある！」という共感が生まれる。右の親指だけに限定した観察眼が良い。",
+        revision: "助詞と語順を磨いて「靴下の 右の親指 だけに穴」とすると、「左ではなく右の親指だけ」という限定感が際立ち、リズムも良くなって情景がポンと浮かぶ。言葉を削って読み手の想像を広げる好例。"
+      }
+    ];
+
+    // 各カードの開閉状態を管理するSet（初期状態はすべて閉じている）
+    const openCardIds = new Set();
+
+    // DOM要素の取得
+    const gridEl = document.getElementById('senryuGrid');
+    const toggleAllBtn = document.getElementById('toggleAllBtn');
+    const toggleAllText = document.getElementById('toggleAllText');
+    const toggleAllIcon = document.getElementById('toggleAllIcon');
+
+    // モーダル関連DOM要素
+    const modalEl = document.getElementById('senryuModal');
+    const modalContentEl = document.getElementById('modalContent');
+    const modalBadgeEl = document.getElementById('modalBadge');
+    const modalTitleEl = document.getElementById('modalTitle');
+    const modalKuEl = document.getElementById('modalKu');
+    const modalAuthorEl = document.getElementById('modalAuthor');
+    const modalInterpretationEl = document.getElementById('modalInterpretation');
+    const modalPointsEl = document.getElementById('modalPoints');
+    const modalTipsEl = document.getElementById('modalTips');
+    const modalCloseTopBtn = document.getElementById('modalCloseTopBtn');
+    const modalCloseBottomBtn = document.getElementById('modalCloseBottomBtn');
+
+    /**
+     * HTMLエスケープ用ヘルパー関数
+     */
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    /**
+     * 一括開閉ボタンの表示を更新
+     */
+    function updateToggleAllButton() {
+      const allOpen = openCardIds.size === senryuData.length;
+      toggleAllText.textContent = allOpen ? 'すべて閉じる' : 'すべて開く';
+      toggleAllBtn.setAttribute('aria-expanded', String(allOpen));
+      if (allOpen) {
+        toggleAllIcon.classList.add('rotate-180');
+      } else {
+        toggleAllIcon.classList.remove('rotate-180');
+      }
+    }
+
+    /**
+     * 単一カードの開閉を切り替え
+     */
+    function toggleCard(id) {
+      const cardEl = document.querySelector(`[data-card-id="${id}"]`);
+      if (!cardEl) return;
+
+      const detailsEl = cardEl.querySelector('.card-details');
+      const chevronEl = cardEl.querySelector('.card-chevron');
+      const isOpen = openCardIds.has(id);
+
+      if (isOpen) {
+        openCardIds.delete(id);
+        detailsEl.classList.add('hidden');
+        chevronEl.classList.remove('rotate-180');
+        cardEl.setAttribute('aria-expanded', 'false');
+      } else {
+        openCardIds.add(id);
+        detailsEl.classList.remove('hidden');
+        chevronEl.classList.add('rotate-180');
+        cardEl.setAttribute('aria-expanded', 'true');
+      }
+
+      updateToggleAllButton();
+    }
+
+    /**
+     * 全カードの一括開閉
+     */
+    function toggleAllCards() {
+      const shouldOpenAll = openCardIds.size < senryuData.length;
+
+      senryuData.forEach((item) => {
+        const cardEl = document.querySelector(`[data-card-id="${item.id}"]`);
+        if (!cardEl) return;
+        const detailsEl = cardEl.querySelector('.card-details');
+        const chevronEl = cardEl.querySelector('.card-chevron');
+
+        if (shouldOpenAll) {
+          openCardIds.add(item.id);
+          detailsEl.classList.remove('hidden');
+          chevronEl.classList.add('rotate-180');
+          cardEl.setAttribute('aria-expanded', 'true');
+        } else {
+          openCardIds.delete(item.id);
+          detailsEl.classList.add('hidden');
+          chevronEl.classList.remove('rotate-180');
+          cardEl.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      updateToggleAllButton();
+    }
+
+    /**
+     * 拡大モーダルを開く
+     */
+    function openModal(id) {
+      const item = senryuData.find((d) => d.id === id);
+      if (!item) return;
+
+      modalBadgeEl.textContent = `No.${String(item.id).padStart(2, '0')}`;
+      modalTitleEl.textContent = item.theme;
+      modalKuEl.textContent = item.ku;
+      modalAuthorEl.textContent = item.author;
+      modalInterpretationEl.textContent = item.interpretation;
+      modalPointsEl.textContent = item.points;
+      modalTipsEl.textContent = item.revision;
+
+      modalEl.classList.remove('hidden');
+      modalEl.classList.add('flex');
+      document.body.classList.add('overflow-hidden');
+      modalCloseTopBtn.focus();
+    }
+
+    /**
+     * 拡大モーダルを閉じる
+     */
+    function closeModal() {
+      modalEl.classList.add('hidden');
+      modalEl.classList.remove('flex');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    /**
+     * カード一覧を描画
+     */
+    function renderCards() {
+      const fragment = document.createDocumentFragment();
+
+      senryuData.forEach((item) => {
+        const card = document.createElement('article');
+        card.setAttribute('data-card-id', item.id);
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-expanded', 'false');
+        card.className =
+          'bg-white/95 rounded-xl border border-stone-200/90 shadow-xs overflow-hidden cursor-pointer hover:-translate-y-1 hover:shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500';
+
+        const numLabel = String(item.id).padStart(2, '0');
+
+        card.innerHTML = `
+          <!-- 上部グラデーション線 -->
+          <div class="h-1 w-full bg-gradient-to-r from-purple-600 to-indigo-900"></div>
+
+          <!-- カード本体（コンパクトな余白と行間） -->
+          <div class="px-3.5 py-2 leading-tight">
+            <!-- ヘッダー行：No.バッジ・テーマ・開閉アイコン -->
+            <div class="flex items-center justify-between gap-1.5 mb-1.5">
+              <div class="flex items-center gap-1.5 min-w-0">
+                <span class="flex-shrink-0 inline-flex items-center justify-center px-1.5 py-0.5 rounded text-[11px] font-bold text-white bg-indigo-900 tracking-wide">
+                  No.${numLabel}
+                </span>
+                <h2 class="text-xs font-bold text-indigo-950 truncate" title="${escapeHtml(item.theme)}">
+                  ${escapeHtml(item.theme)}
+                </h2>
+              </div>
+              <svg class="card-chevron flex-shrink-0 w-3.5 h-3.5 text-stone-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+
+            <!-- 句（横書き・五七五改行） -->
+            <div class="py-1.5 px-2.5 rounded-lg bg-washi/80 border border-stone-200/60">
+              <p class="whitespace-pre-line text-[15px] font-bold text-sumi leading-tight tracking-wide">${escapeHtml(item.ku)}</p>
+              <div class="mt-1 text-right text-xs font-medium text-indigo-900/90">
+                — ${escapeHtml(item.author)}
+              </div>
+            </div>
+
+            <!-- アコーディオン詳細エリア（初期非表示） -->
+            <div class="card-details hidden mt-2.5 pt-2.5 border-t border-stone-200/80 space-y-2 text-xs leading-snug">
+              <div>
+                <span class="inline-block px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-900 font-bold text-[11px] mb-0.5">
+                  解釈・背景
+                </span>
+                <p class="text-stone-700">${escapeHtml(item.interpretation)}</p>
+              </div>
+
+              <div>
+                <span class="inline-block px-1.5 py-0.5 rounded bg-purple-50 text-purple-900 font-bold text-[11px] mb-0.5">
+                  評価のポイント
+                </span>
+                <p class="text-stone-700">${escapeHtml(item.points)}</p>
+              </div>
+
+              <div>
+                <span class="inline-block px-1.5 py-0.5 rounded bg-amber-50 text-amber-900 font-bold text-[11px] mb-0.5">
+                  推敲ヒント
+                </span>
+                <p class="text-stone-700">${escapeHtml(item.revision)}</p>
+              </div>
+
+              <!-- 拡大表示（モーダル）ボタン -->
+              <div class="pt-1.5 flex justify-end">
+                <button
+                  type="button"
+                  class="modal-open-btn inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-indigo-900 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/80 transition focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                  </svg>
+                  拡大表示（モーダル）
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // カードクリックでアコーディオン開閉
+        card.addEventListener('click', () => {
+          toggleCard(item.id);
+        });
+
+        // キーボード（Enter / Space）でもカード開閉可能に
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleCard(item.id);
+          }
+        });
+
+        // 拡大表示ボタンクリック（カードの開閉イベント発火を防止）
+        const modalBtn = card.querySelector('.modal-open-btn');
+        modalBtn.addEventListener('click', (event) => {
+          event.stopPropagation();
+          openModal(item.id);
+        });
+
+        fragment.appendChild(card);
+      });
+
+      gridEl.appendChild(fragment);
+    }
+
+    // イベントリスナー登録
+    toggleAllBtn.addEventListener('click', toggleAllCards);
+    modalCloseTopBtn.addEventListener('click', closeModal);
+    modalCloseBottomBtn.addEventListener('click', closeModal);
+
+    // モーダル背景オーバーレイのクリックで閉じる
+    modalEl.addEventListener('click', (event) => {
+      if (event.target === modalEl) {
+        closeModal();
+      }
+    });
+
+    // Escキーでモーダルを閉じる
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !modalEl.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+
+    // 初期描画
+    renderCards();
+  </script>
+</body>
+</html>
