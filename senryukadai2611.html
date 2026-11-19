@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>課題吟「わいわい」川柳句会 解釈・評価ポイント一覧</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --washi-bg: #f8f5ef;
+      --ink-main: #1f2937;
+      --indigo-deep: #243b53;
+      --shu-accent: #b83b2a;
+      --gold-soft: #b7791f;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', 'Inter', sans-serif;
+      background-color: var(--washi-bg);
+      color: var(--ink-main);
+      background-image: radial-gradient(rgba(180, 165, 140, 0.14) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .font-serif-jp {
+      font-family: 'Noto Serif JP', serif;
+    }
+
+    .senryu-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .senryu-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px -8px rgba(36, 59, 83, 0.14);
+      border-color: #cbd5e1;
+    }
+
+    .hanko-badge {
+      border: 1.5px solid #b83b2a;
+      color: #b83b2a;
+      background-color: #fff7f5;
+    }
+
+    body.large-text .poem-text {
+      font-size: 1.35rem;
+      line-height: 1.7;
+    }
+
+    body.large-text .body-copy {
+      font-size: 1.02rem;
+      line-height: 1.75;
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff;
+      }
+      .senryu-card {
+        break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased">
+  <!-- Header -->
+  <header class="bg-[#243b53] text-white shadow-md">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-7">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-amber-200 text-xs font-medium tracking-wider mb-3">
+            <span>川柳句会 講評まとめ</span>
+            <span>•</span>
+            <span>全12句</span>
+          </div>
+          <h1 class="font-serif-jp text-2xl sm:text-3xl font-bold tracking-wide text-white">
+            課題吟「わいわい」 解釈・評価ポイント一覧
+          </h1>
+          <p class="mt-2 text-sm sm:text-base text-slate-200">
+            句会での実際の講評内容にもとづき、各作品の解釈・評価ポイント・推敲ヒントを横4列のカード形式でまとめています。
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 no-print">
+          <button
+            id="toggleAllCardsBtn"
+            type="button"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-sm font-medium text-white border border-white/20 transition"
+            aria-pressed="false"
+          >
+            <span id="toggleAllCardsLabel">すべて開く</span>
+          </button>
+          <button
+            id="fontSizeToggle"
+            type="button"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-sm font-medium text-white border border-white/20 transition"
+            aria-pressed="false"
+          >
+            <span aria-hidden="true">Aa</span>
+            <span id="fontSizeLabel">文字サイズ：標準</span>
+          </button>
+          <button
+            id="printBtn"
+            type="button"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-900 text-sm font-semibold shadow-sm transition"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z" />
+            </svg>
+            <span>印刷する</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Controls Bar -->
+  <section class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2 no-print">
+    <div class="bg-white rounded-xl border border-stone-200 shadow-sm p-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <!-- Category Filters -->
+      <div class="flex flex-wrap items-center gap-2" role="group" aria-label="テーマ絞り込み">
+        <button type="button" data-filter="all" class="filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-[#243b53] text-white">
+          すべて (<span id="countAll">12</span>)
+        </button>
+        <button type="button" data-filter="仲間・会話" class="filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-stone-100 text-stone-700 hover:bg-stone-200">
+          仲間・会話
+        </button>
+        <button type="button" data-filter="季節・行事" class="filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-stone-100 text-stone-700 hover:bg-stone-200">
+          季節・行事
+        </button>
+        <button type="button" data-filter="ユーモア・見立て" class="filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-stone-100 text-stone-700 hover:bg-stone-200">
+          ユーモア・見立て
+        </button>
+        <button type="button" data-filter="favorites" class="filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">
+          ★ 選句・お気に入り (<span id="countFav">0</span>)
+        </button>
+      </div>
+
+      <!-- Search Input -->
+      <div class="relative w-full lg:w-80">
+        <label for="searchInput" class="sr-only">句・詠み人・キーワードで検索</label>
+        <svg class="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="句・詠み人・講評キーワードで検索..."
+          class="w-full pl-10 pr-4 py-2 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#243b53] focus:border-[#243b53]"
+        />
+      </div>
+    </div>
+
+    <div class="mt-3 flex items-center justify-between text-xs sm:text-sm text-stone-600 px-1">
+      <p id="resultSummary">全12句を表示しています（カードをクリックすると解釈・評価が開きます）</p>
+      <button id="resetFiltersBtn" type="button" class="hidden text-[#b83b2a] hover:underline font-medium">
+        絞り込みを解除
+      </button>
+    </div>
+  </section>
+
+  <!-- Main 4-Column Grid -->
+  <main class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5 pb-14">
+    <div id="senryuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
+      <!-- Cards rendered dynamically -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden bg-white rounded-xl border border-stone-200 p-10 text-center">
+      <p class="font-serif-jp text-lg text-stone-700 font-semibold">該当する川柳が見つかりませんでした</p>
+      <p class="mt-2 text-sm text-stone-500">検索キーワードやテーマの絞り込みを変更してみてください。</p>
+      <button id="emptyResetBtn" type="button" class="mt-4 px-4 py-2 rounded-lg bg-[#243b53] text-white text-sm font-medium hover:bg-slate-700 transition">
+        すべての句を表示
+      </button>
+    </div>
+  </main>
+
+  <!-- Detail Modal -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 no-print" role="dialog" aria-modal="true" aria-labelledby="modalPoemTitle">
+    <div class="bg-[#fcfaf6] rounded-2xl shadow-2xl border border-stone-200 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-stone-200 bg-[#243b53] text-white rounded-t-2xl">
+        <div class="flex items-center gap-2.5">
+          <span id="modalNumber" class="text-xs font-semibold px-2.5 py-0.5 rounded bg-white/15 text-amber-200">No. 01</span>
+          <span id="modalCategory" class="text-xs px-2.5 py-0.5 rounded-full bg-white/10 text-slate-100">テーマ</span>
+        </div>
+        <button id="closeModalBtn" type="button" class="p-1.5 rounded-lg hover:bg-white/15 text-slate-200 hover:text-white transition" aria-label="閉じる">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-6 sm:p-8">
+        <div class="bg-white rounded-xl border border-stone-200 p-6 text-center shadow-xs">
+          <h2 id="modalPoemTitle" class="font-serif-jp text-2xl sm:text-3xl font-bold text-slate-900 leading-relaxed tracking-wide"></h2>
+          <div class="mt-4 flex items-center justify-center gap-3">
+            <span id="modalAuthor" class="hanko-badge inline-flex items-center px-3 py-1 rounded-md text-sm font-serif-jp font-semibold"></span>
+          </div>
+        </div>
+
+        <div class="mt-6 space-y-4">
+          <div class="bg-white rounded-xl border border-stone-200 p-5">
+            <h3 class="text-xs font-bold tracking-wider text-[#243b53] uppercase flex items-center gap-2 mb-2">
+              <span class="w-2 h-2 rounded-full bg-[#243b53]"></span>
+              解釈・背景
+            </h3>
+            <p id="modalInterpretation" class="text-sm sm:text-base text-stone-700 leading-relaxed"></p>
+          </div>
+
+          <div class="bg-amber-50/80 rounded-xl border border-amber-200/80 p-5">
+            <h3 class="text-xs font-bold tracking-wider text-amber-900 uppercase flex items-center gap-2 mb-2">
+              <span class="w-2 h-2 rounded-full bg-amber-600"></span>
+              句会の評価ポイント
+            </h3>
+            <p id="modalEvaluation" class="text-sm sm:text-base text-stone-800 leading-relaxed"></p>
+          </div>
+
+          <div id="modalRevisionBox" class="hidden bg-sky-50/80 rounded-xl border border-sky-200/80 p-5">
+            <h3 class="text-xs font-bold tracking-wider text-sky-900 uppercase flex items-center gap-2 mb-2">
+              <span class="w-2 h-2 rounded-full bg-sky-600"></span>
+              推敲・添削ヒント
+            </h3>
+            <p id="modalRevision" class="text-sm sm:text-base text-stone-800 leading-relaxed"></p>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-stone-200 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <button id="modalFavBtn" type="button" class="px-3.5 py-2 rounded-lg border text-sm font-medium transition"></button>
+            <button id="modalCopyBtn" type="button" class="px-3.5 py-2 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 text-stone-700 text-sm font-medium transition">
+              句をコピー
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button id="modalPrevBtn" type="button" class="px-3.5 py-2 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-800 text-sm font-medium transition">
+              ← 前の句
+            </button>
+            <button id="modalNextBtn" type="button" class="px-3.5 py-2 rounded-lg bg-[#243b53] hover:bg-slate-700 text-white text-sm font-medium transition">
+              次の句 →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white text-sm px-4 py-2.5 rounded-lg shadow-lg transition-opacity">
+    コピーしました
+  </div>
+
+  <script>
+    const senryuData = [
+      {
+        id: 1,
+        poem: "女子会の テンション高く 空高く",
+        author: "しず",
+        category: "仲間・会話",
+        interpretation:
+          "「女子会」という響きだけで賑やかで元気な情景が浮かぶ一句。言いたい核心は上五・中七の「女子会のテンション高く」に凝縮されており、秋の季節感も重ねて「空高く」と爽やかに結んでいます。",
+        evaluation:
+          "中七までで内容が出切っているため下五（座五）の置き方が難しいところを、「高く」のリフレイン（反復）でリズム良くまとめ上げた点が高評価。情趣もあり、気持ちよく読み切れる仕上がりです。",
+        revision: ""
+      },
+      {
+        id: 2,
+        poem: "酒に酔い 語りつくした 八十路達",
+        author: "かみこ",
+        category: "仲間・会話",
+        interpretation:
+          "お酒を飲みながらワイワイ元気に語り合った場面。作者のお話では、実際には「同窓会」で集まった時の出来事を詠んだとのことです。",
+        evaluation:
+          "お酒とおしゃべりの元気な空気感は伝わるものの、「八十路達」だけだと「高齢者」や「若者」に置き換えても成立してしまい、なぜ八十路なのかという趣旨がややぼやけやすい点が指摘されました。",
+        revision:
+          "「同窓会」や「クラス会」など具体的な集まりの場を織り込むと、年齢感や状況が読み手によりくっきりと伝わります。"
+      },
+      {
+        id: 3,
+        poem: "麻雀だ トランプゲーム もう飽きた",
+        author: "斎木",
+        category: "ユーモア・見立て",
+        interpretation:
+          "一見するとゲームで盛り上がる句ですが、アメリカの「トランプ氏」と中国の「麻雀」を掛けた時事風刺の一句。「トランプ（アメリカ）はもう飽きたから、これからは麻雀（中国）だ」という皮肉が込められています。",
+        evaluation:
+          "カードゲームの「トランプ」とアメリカのトランプ氏、中国の「麻雀」を二重に掛けた風刺の効かせ方がユニーク。句会でも「日本なら花札やカルタか」「政治家のカリスマ性や顔つき」など時事談義に大きく花が咲きました。",
+        revision: ""
+      },
+      {
+        id: 4,
+        poem: "飛び入りの 神輿担いで 光る汗",
+        author: "ひろみつ",
+        category: "季節・行事",
+        interpretation:
+          "事前の予約などはなく、その場の祭りの熱気に誘われて「飛び入り」で神輿を担ぎ、爽やかな汗を光らせている臨場感あふれる場面です。",
+        evaluation:
+          "下五（座五）を平凡な「汗光る」にせず、あえて語順を逆にして「光る汗」と体言止めにした工夫が高く評価されました。言葉をひっくり返すだけで説明臭さが抜け、ぐっと引き締まった一句になっています。",
+        revision: ""
+      },
+      {
+        id: 5,
+        poem: "公民館 窓まで笑う 五七五",
+        author: "まさかず",
+        category: "ユーモア・見立て",
+        interpretation:
+          "公民館で開かれる川柳句会の和やかで賑やかな光景。集まったみんなの笑い声があふれ、部屋の窓まで一緒に笑っているかのような楽しい空気を切り取っています。",
+        evaluation:
+          "「窓まで笑う」は文句のつけようがない秀逸な表現。下五の「五七五」は、川柳・俳句・短歌の世界では慣用的に「ごー・しち・ご」と伸ばして5音で読む（七五三と同様）ため、音調的にもこのまま見事に収まっています。",
+        revision: ""
+      },
+      {
+        id: 6,
+        poem: "お互いに 弾丸トーク 聞いちゃない",
+        author: "純子",
+        category: "仲間・会話",
+        interpretation:
+          "それぞれが自分の話したいことばかりペラペラとしゃべり合い、相手の話はまるで耳に入っていないのに「聞いてるよ」と言い合うような、愉快で賑やかなおしゃべりの風景です。",
+        evaluation:
+          "普通の話し言葉なら「聞いてない」となるところを、あえて口語調で「聞いちゃない」と5音に収めた表現が絶妙で、このままでOKと高評価。場の雰囲気が手に取るように伝わります。",
+        revision:
+          "上五は「お互いに」でも良いが、「お互いの 弾丸トーク 聞いちゃない」とする案も紹介されました。"
+      },
+      {
+        id: 7,
+        poem: "野菜肉 ワイワイ集う 鍋の中",
+        author: "びいき",
+        category: "ユーモア・見立て",
+        interpretation:
+          "鍋の中に野菜やお肉などの具材が賑やかに集まっている様子を詠んだ、温かみのある一句です。",
+        evaluation:
+          "川柳は17音しかない「省略の文芸」のため、お題の「ワイワイ」をそのまま言葉として入れてしまうのは少しもったいない、という講評がありました。具材を広げて賑やかさを間接的に見せる余地があります。",
+        revision:
+          "「ワイワイ」を省いて「野菜肉 魚も集う 鍋の中」のようにすると、17音をより豊かに活かして賑やかさを表現できます。"
+      },
+      {
+        id: 8,
+        poem: "集まれば 昔し話で 盛りあがる",
+        author: "ちゑ",
+        category: "仲間・会話",
+        interpretation:
+          "親族や知人が集まって昔話に花を咲かせる様子。作者のお話では、実際には「亡くなったおばあちゃん（祖母）の思い出話」で盛り上がった場面とのことです。",
+        evaluation:
+          "表記として「昔し話」の「し」は不要（「昔話」でよい）。また、作品だけでは誰のどんな話かが見えにくいため、背景にある具体性を少し出すと情景がぐっと立ち上がります。",
+        revision:
+          "「亡き祖母の話」など具体的な対象を織り込むと、親族や友人が集まって懐かしむ温かい場面がより鮮明に伝わります。"
+      },
+      {
+        id: 9,
+        poem: "晴れ着きて はしゃぐ子供ら 七五三",
+        author: "邦さん",
+        category: "季節・行事",
+        interpretation:
+          "七五三の晴れ着を着た子どもたちが、嬉しそうに駆けずり回ったりはしゃいだりしている微笑ましい光景です。",
+        evaluation:
+          "「晴れ着きて」の「きて」は説明的で無駄な言葉になりやすい点が指摘されました。説明を省き、子どもが走り回る具体的な動きや周囲の目線を取り入れると、川柳としての味わいが一層深まります。",
+        revision:
+          "「走り出し 晴れ着にはしゃぐ 七五三」や、見守る大人の声を入れた「転ぶなよ 晴れ着…」など、動きや視点を具体化する推敲案が挙がりました。"
+      },
+      {
+        id: 10,
+        poem: "ひよどりが 朝から会議 冬木立",
+        author: "啓子",
+        category: "ユーモア・見立て",
+        interpretation:
+          "葉を落とした冬木立にヒヨドリが集まり、朝から賑やかに鳴き交わしている様子を「会議」に見立てた一句。当初はカラス案もありましたが、作者の思いであるヒヨドリと冬木立を活かしています。",
+        evaluation:
+          "うるさく鳴き合う鳥たちを「朝から会議」と表した見立てがぴったり。難しい漢字を避けてひらがなで「ひよどりが」とした表記も読みやすく、冬木立の季節感と素直な語順が高く評価されました。",
+        revision:
+          "「ひよどりの 会議朝から…」と語順を変える案も検討されましたが、解釈が割れにくく素直に伝わる現行の形が一番良いとの結論でした。"
+      },
+      {
+        id: 11,
+        poem: "運動会 天まで届け 子らの声",
+        author: "さち",
+        category: "季節・行事",
+        interpretation:
+          "運動会で元気いっぱいに歓声を上げる子どもたち。その明るい声が青空の彼方までまっすぐ届いてほしいという、晴れやかな光景を詠んでいます。",
+        evaluation:
+          "最近は暑さのため春に開催する学校も増えているものの、やはり秋の運動会らしい清々しさがよく出ています。「天まで届け 子らの声」と伸びやかに言い切った爽快さが魅力の一句です。",
+        revision: ""
+      },
+      {
+        id: 12,
+        poem: "ワイワイの中 補聴器が 拾う声",
+        author: "春栄",
+        category: "仲間・会話",
+        interpretation:
+          "周囲がワイワイと賑やかに語り合う輪の中で、補聴器を通して相手の声を拾い上げている、シニア世代のリアルで味わい深い日常を切り取っています。",
+        evaluation:
+          "使われている言葉や着眼点は非常に良いものの、上五「ワイワイの中」・中七「補聴器が」の音数と区切りがややギクシャクして聞こえる点が指摘されました。",
+        revision:
+          "語順を入れ替えて「補聴器は ワイワイの中 声拾う」のように組み立て直すと、5・7・5のリズムがすっきり整います。"
+      }
+    ];
+
+    const STORAGE_KEY = "senryu_waiwai_favorites_v1";
+    let favorites = new Set();
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) favorites = new Set(parsed);
+      }
+    } catch (e) {
+      // Ignore storage errors in restricted environments
+    }
+
+    let currentFilter = "all";
+    let searchQuery = "";
+    let activeModalId = null;
+    let isLargeText = false;
+    let expandedIds = new Set();
+
+    const gridEl = document.getElementById("senryuGrid");
+    const emptyStateEl = document.getElementById("emptyState");
+    const resultSummaryEl = document.getElementById("resultSummary");
+    const resetFiltersBtn = document.getElementById("resetFiltersBtn");
+    const emptyResetBtn = document.getElementById("emptyResetBtn");
+    const countAllEl = document.getElementById("countAll");
+    const countFavEl = document.getElementById("countFav");
+    const searchInputEl = document.getElementById("searchInput");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const toggleAllCardsBtn = document.getElementById("toggleAllCardsBtn");
+    const toggleAllCardsLabel = document.getElementById("toggleAllCardsLabel");
+    const fontSizeToggle = document.getElementById("fontSizeToggle");
+    const fontSizeLabel = document.getElementById("fontSizeLabel");
+    const printBtn = document.getElementById("printBtn");
+
+    // Modal elements
+    const detailModal = document.getElementById("detailModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const modalNumber = document.getElementById("modalNumber");
+    const modalCategory = document.getElementById("modalCategory");
+    const modalPoemTitle = document.getElementById("modalPoemTitle");
+    const modalAuthor = document.getElementById("modalAuthor");
+    const modalInterpretation = document.getElementById("modalInterpretation");
+    const modalEvaluation = document.getElementById("modalEvaluation");
+    const modalRevisionBox = document.getElementById("modalRevisionBox");
+    const modalRevision = document.getElementById("modalRevision");
+    const modalFavBtn = document.getElementById("modalFavBtn");
+    const modalCopyBtn = document.getElementById("modalCopyBtn");
+    const modalPrevBtn = document.getElementById("modalPrevBtn");
+    const modalNextBtn = document.getElementById("modalNextBtn");
+    const toastEl = document.getElementById("toast");
+
+    let toastTimer = null;
+
+    function showToast(message) {
+      toastEl.textContent = message;
+      toastEl.classList.remove("hidden");
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toastEl.classList.add("hidden");
+      }, 2200);
+    }
+
+    function saveFavorites() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(favorites)));
+      } catch (e) {
+        // Ignore storage errors
+      }
+    }
+
+    function toggleFavorite(id) {
+      if (favorites.has(id)) {
+        favorites.delete(id);
+      } else {
+        favorites.add(id);
+      }
+      saveFavorites();
+      render();
+      if (activeModalId === id) {
+        updateModalFavButton(id);
+      }
+    }
+
+    function getFilteredData() {
+      const q = searchQuery.trim().toLowerCase();
+      return senryuData.filter((item) => {
+        if (currentFilter === "favorites" && !favorites.has(item.id)) return false;
+        if (currentFilter !== "all" && currentFilter !== "favorites" && item.category !== currentFilter) {
+          return false;
+        }
+        if (q) {
+          const hay = `${item.poem} ${item.author} ${item.category} ${item.interpretation} ${item.evaluation} ${item.revision || ""}`.toLowerCase();
+          return hay.includes(q);
+        }
+        return true;
+      });
+    }
+
+    function categoryBadgeClass(category) {
+      if (category === "仲間・会話") return "bg-sky-50 text-sky-800 border-sky-200";
+      if (category === "季節・行事") return "bg-emerald-50 text-emerald-800 border-emerald-200";
+      return "bg-purple-50 text-purple-800 border-purple-200";
+    }
+
+    function render() {
+      countAllEl.textContent = String(senryuData.length);
+      countFavEl.textContent = String(favorites.size);
+
+      const filtered = getFilteredData();
+      gridEl.innerHTML = "";
+
+      const isFiltered = currentFilter !== "all" || searchQuery.trim() !== "";
+      resetFiltersBtn.classList.toggle("hidden", !isFiltered);
+
+      if (filtered.length === 0) {
+        emptyStateEl.classList.remove("hidden");
+        resultSummaryEl.textContent = "0句が該当しました";
+        return;
+      }
+
+      emptyStateEl.classList.add("hidden");
+      resultSummaryEl.textContent = isFiltered
+        ? `${filtered.length}句を表示しています（全${senryuData.length}句中）`
+        : `全${senryuData.length}句を表示しています（カードをクリックすると拡大表示されます）`;
+
+      const allExpanded = filtered.length > 0 && filtered.every((item) => expandedIds.has(item.id));
+      toggleAllCardsLabel.textContent = allExpanded ? "すべて閉じる" : "すべて開く";
+      toggleAllCardsBtn.setAttribute("aria-pressed", String(allExpanded));
+
+      filtered.forEach((item) => {
+        const isFav = favorites.has(item.id);
+        const isExpanded = expandedIds.has(item.id);
+        const card = document.createElement("article");
+        card.className =
+          "senryu-card bg-white rounded-xl border border-stone-200 shadow-xs flex flex-col overflow-hidden cursor-pointer";
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("role", "button");
+        card.setAttribute("aria-expanded", String(isExpanded));
+        card.setAttribute("aria-label", `${item.poem} 詠み人 ${item.author} の解釈・評価を${isExpanded ? "閉じる" : "開く"}`);
+
+        const numStr = String(item.id).padStart(2, "0");
+        const revisionHtml = item.revision
+          ? `
+            <div class="bg-sky-50/75 rounded-lg border border-sky-200/70 p-3">
+              <h3 class="text-xs font-bold text-sky-900 flex items-center gap-1.5 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-sky-600"></span>
+                推敲ヒント
+              </h3>
+              <p class="body-copy text-xs sm:text-[13px] text-stone-800 leading-relaxed">
+                ${item.revision}
+              </p>
+            </div>
+          `
+          : "";
+
+        card.innerHTML = `
+          <!-- Card Top Bar -->
+          <div class="px-3.5 pt-2.5 pb-2 flex items-center justify-between gap-2 border-b border-stone-100 bg-stone-50/70">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-xs font-bold text-slate-500 tracking-wider">No.${numStr}</span>
+              <span class="text-[11px] font-medium px-2 py-0.5 rounded-full border truncate ${categoryBadgeClass(item.category)}">
+                ${item.category}
+              </span>
+            </div>
+            <button
+              type="button"
+              class="fav-btn no-print shrink-0 p-1 rounded-full transition ${
+                isFav ? "text-amber-500 hover:bg-amber-50" : "text-stone-300 hover:text-amber-400 hover:bg-stone-100"
+              }"
+              data-id="${item.id}"
+              aria-label="${isFav ? "選句から外す" : "選句に追加"}"
+              aria-pressed="${isFav}"
+              title="${isFav ? "選句から外す" : "選句に追加"}"
+            >
+              <svg class="w-5 h-5" fill="${isFav ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Poem & Author (Always Visible) -->
+          <div class="px-4 pt-3.5 pb-3 bg-gradient-to-b from-[#fffdf9] to-white">
+            <h2 class="poem-text font-serif-jp text-[1.1rem] font-bold text-slate-900 leading-relaxed tracking-wide">
+              ${item.poem}
+            </h2>
+            <div class="mt-2.5 flex items-center justify-between gap-2">
+              <span class="text-[11px] text-stone-500 no-print inline-flex items-center gap-1">
+                <span>${isExpanded ? "▲ 閉じる" : "▼ 解釈・評価を見る"}</span>
+              </span>
+              <span class="hanko-badge inline-flex items-center px-2.5 py-0.5 rounded text-xs font-serif-jp font-semibold">
+                詠み人：${item.author}
+              </span>
+            </div>
+          </div>
+
+          <!-- Collapsible Details -->
+          <div class="${isExpanded ? "flex" : "hidden"} p-4 pt-3 border-t border-stone-100 flex-col gap-3 bg-white">
+            <div>
+              <h3 class="text-xs font-bold text-[#243b53] flex items-center gap-1.5 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#243b53]"></span>
+                解釈・背景
+              </h3>
+              <p class="body-copy text-xs sm:text-[13.5px] text-stone-700 leading-relaxed">
+                ${item.interpretation}
+              </p>
+            </div>
+
+            <div class="bg-amber-50/75 rounded-lg border border-amber-200/70 p-3">
+              <h3 class="text-xs font-bold text-amber-900 flex items-center gap-1.5 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                評価のポイント
+              </h3>
+              <p class="body-copy text-xs sm:text-[13.5px] text-stone-800 leading-relaxed">
+                ${item.evaluation}
+              </p>
+            </div>
+
+            ${revisionHtml}
+
+            <div class="pt-1 flex justify-end no-print">
+              <button
+                type="button"
+                class="modal-open-btn text-xs font-medium text-[#243b53] hover:text-slate-900 hover:underline px-2 py-1 rounded"
+              >
+                大きな画面で見る ↗
+              </button>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener("click", (e) => {
+          if (e.target.closest(".fav-btn") || e.target.closest(".modal-open-btn")) return;
+          if (expandedIds.has(item.id)) {
+            expandedIds.delete(item.id);
+          } else {
+            expandedIds.add(item.id);
+          }
+          render();
+        });
+
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            if (e.target.closest(".fav-btn") || e.target.closest(".modal-open-btn")) return;
+            e.preventDefault();
+            if (expandedIds.has(item.id)) {
+              expandedIds.delete(item.id);
+            } else {
+              expandedIds.add(item.id);
+            }
+            render();
+          }
+        });
+
+        const favBtn = card.querySelector(".fav-btn");
+        favBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleFavorite(item.id);
+        });
+
+        const modalOpenBtn = card.querySelector(".modal-open-btn");
+        if (modalOpenBtn) {
+          modalOpenBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openModal(item.id);
+          });
+        }
+
+        gridEl.appendChild(card);
+      });
+    }
+
+    function updateModalFavButton(id) {
+      const isFav = favorites.has(id);
+      if (isFav) {
+        modalFavBtn.textContent = "★ 選句済み";
+        modalFavBtn.className =
+          "px-3.5 py-2 rounded-lg border border-amber-300 bg-amber-100 text-amber-900 text-sm font-semibold transition hover:bg-amber-200";
+      } else {
+        modalFavBtn.textContent = "☆ 選句に追加";
+        modalFavBtn.className =
+          "px-3.5 py-2 rounded-lg border border-stone-300 bg-white text-stone-700 text-sm font-medium transition hover:bg-stone-50";
+      }
+    }
+
+    function openModal(id) {
+      const item = senryuData.find((d) => d.id === id);
+      if (!item) return;
+      activeModalId = id;
+
+      modalNumber.textContent = `No. ${String(item.id).padStart(2, "0")}`;
+      modalCategory.textContent = item.category;
+      modalPoemTitle.textContent = item.poem;
+      modalAuthor.textContent = `詠み人：${item.author}`;
+      modalInterpretation.textContent = item.interpretation;
+      modalEvaluation.textContent = item.evaluation;
+
+      if (item.revision) {
+        modalRevision.textContent = item.revision;
+        modalRevisionBox.classList.remove("hidden");
+      } else {
+        modalRevision.textContent = "";
+        modalRevisionBox.classList.add("hidden");
+      }
+
+      updateModalFavButton(id);
+
+      detailModal.classList.remove("hidden");
+      detailModal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      activeModalId = null;
+      detailModal.classList.add("hidden");
+      detailModal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }
+
+    function navigateModal(delta) {
+      if (activeModalId === null) return;
+      const list = getFilteredData();
+      if (list.length === 0) return;
+      const idx = list.findIndex((d) => d.id === activeModalId);
+      const nextIdx = idx === -1 ? 0 : (idx + delta + list.length) % list.length;
+      openModal(list[nextIdx].id);
+    }
+
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(text)
+          .then(() => showToast("句と詠み人をコピーしました"))
+          .catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showToast("句と詠み人をコピーしました");
+      } catch (e) {
+        showToast("コピーできませんでした");
+      }
+      document.body.removeChild(ta);
+    }
+
+    // Event Listeners
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentFilter = btn.dataset.filter;
+        filterButtons.forEach((b) => {
+          const active = b.dataset.filter === currentFilter;
+          if (b.dataset.filter === "favorites") {
+            b.className = active
+              ? "filter-btn px-3.5 py-1.5 rounded-full text-sm font-semibold transition bg-amber-500 text-white shadow-xs"
+              : "filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100";
+          } else {
+            b.className = active
+              ? "filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-[#243b53] text-white"
+              : "filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-stone-100 text-stone-700 hover:bg-stone-200";
+          }
+        });
+        render();
+      });
+    });
+
+    searchInputEl.addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      render();
+    });
+
+    function resetAllFilters() {
+      currentFilter = "all";
+      searchQuery = "";
+      searchInputEl.value = "";
+      filterButtons.forEach((b) => {
+        if (b.dataset.filter === "all") {
+          b.className = "filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-[#243b53] text-white";
+        } else if (b.dataset.filter === "favorites") {
+          b.className = "filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100";
+        } else {
+          b.className = "filter-btn px-3.5 py-1.5 rounded-full text-sm font-medium transition bg-stone-100 text-stone-700 hover:bg-stone-200";
+        }
+      });
+      render();
+    }
+
+    resetFiltersBtn.addEventListener("click", resetAllFilters);
+    emptyResetBtn.addEventListener("click", resetAllFilters);
+
+    toggleAllCardsBtn.addEventListener("click", () => {
+      const filtered = getFilteredData();
+      const allExpanded = filtered.length > 0 && filtered.every((item) => expandedIds.has(item.id));
+      if (allExpanded) {
+        filtered.forEach((item) => expandedIds.delete(item.id));
+      } else {
+        filtered.forEach((item) => expandedIds.add(item.id));
+      }
+      render();
+    });
+
+    fontSizeToggle.addEventListener("click", () => {
+      isLargeText = !isLargeText;
+      document.body.classList.toggle("large-text", isLargeText);
+      fontSizeToggle.setAttribute("aria-pressed", String(isLargeText));
+      fontSizeLabel.textContent = isLargeText ? "文字サイズ：大きめ" : "文字サイズ：標準";
+    });
+
+    printBtn.addEventListener("click", () => {
+      window.print();
+    });
+
+    closeModalBtn.addEventListener("click", closeModal);
+    detailModal.addEventListener("click", (e) => {
+      if (e.target === detailModal) closeModal();
+    });
+
+    modalFavBtn.addEventListener("click", () => {
+      if (activeModalId !== null) toggleFavorite(activeModalId);
+    });
+
+    modalCopyBtn.addEventListener("click", () => {
+      const item = senryuData.find((d) => d.id === activeModalId);
+      if (item) {
+        copyText(`「${item.poem}」（詠み人：${item.author}）`);
+      }
+    });
+
+    modalPrevBtn.addEventListener("click", () => navigateModal(-1));
+    modalNextBtn.addEventListener("click", () => navigateModal(1));
+
+    document.addEventListener("keydown", (e) => {
+      if (activeModalId === null) return;
+      if (e.key === "Escape") closeModal();
+      if (e.key === "ArrowLeft") navigateModal(-1);
+      if (e.key === "ArrowRight") navigateModal(1);
+    });
+
+    render();
+  </script>
+</body>
+</html>
